@@ -1,0 +1,40 @@
+<md-sidenav class="md-sidenav-right" md-component-id="right" md-whiteframe="2">
+	<md-toolbar class="md-hue-2">
+		<div class="md-toolbar-tools">
+			<h3>Menu</h3>
+		</div>
+	</md-toolbar>
+	</md-toolbar>
+	<md-menu-item>
+		<md-button ng-href="#/" ng-click="closeSidebar()">
+			Home
+		</md-button>
+	</md-menu-item>
+	<md-menu-item>
+		<md-button ng-href="#/about" ng-click="closeSidebar()">
+			About
+		</md-button>
+	</md-menu-item>
+	<md-menu-item>
+		<md-button ng-href="#/faq" ng-click="closeSidebar()">
+			FAQ
+		</md-button>
+	</md-menu-item>
+	<md-divider></md-divider>
+	<md-menu-item ng-if="!currentUser">
+		<md-button ng-href="#/login" ng-click="closeSidebar()">
+			Login
+		</md-button>
+	</md-menu-item>
+	<md-menu-item ng-if="currentUser">
+		<md-button ng-href="#/myprofile" ng-click="closeSidebar()">
+			My Profile
+		</md-button>
+	</md-menu-item>
+
+	<md-menu-item ng-if="currentUser">
+		<md-button  ng-click="logout()">
+			Logout
+		</md-button>
+	</md-menu-item>
+</md-sidenav>

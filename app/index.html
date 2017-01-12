@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html ng-app="bballapp">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable = no"">
+	<meta name="apple-mobile-web-app-title" content="ThursBball">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<!-- build:css css/css.css -->
+	<link rel="stylesheet" type="text/css" href="./lib/angular-material/angular-material.css">
+	<link rel="stylesheet" type="text/css" href="./lib/mdi/materialdesignicons.css">
+	<link rel="stylesheet" type="text/css" href="./lib/angular-add-to-home-screen/aaths.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<!-- endbuild -->
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+
+	<link rel="apple-touch-icon" sizes="57x57" href="./images/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="./images/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="./images/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="./images/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="./images/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="./images/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="./images/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="./images/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="./images/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="./images/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+	<link rel="icon" type="image/ico" href="./images/favicon-16x16.png">
+	<link rel="manifest" href="/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+
+	<title>THURSBBALL</title>
+</head>
+
+<body ng-controller="MenuController" layout="row" style="height: 100vh;">
+	
+	<div layout="column" flex>
+		<div ui-view="header"></div>
+		<div ui-view="sidenav"></div>
+		<md-content class="container">
+			<ui-view></ui-view>
+		</md-content>
+	</div>
+
+	<script src="//cdn.jsdelivr.net/ua-parser.js/0.7.3/ua-parser.js"></script>
+	<script src="./lib/angular/angular.js"></script>
+	<script src="./lib/angular-ui-router/angular-ui-router.js"></script>
+	<script src="./lib/firebase/firebase.js"></script>
+	<script src="./lib/angularfire/angularfire.js"></script>
+	<script src="./lib/angular-animate/angular-animate.js"></script>
+	<script src="./lib/angular-aria/angular-aria.js"></script>
+	<script src="./lib/angular-material/angular-material.js"></script>
+	<script src="./lib/angular-twilio/angular-twilio.js"></script>
+	<script src="./lib/angular-add-to-home-screen/angular-add-to-home-screen.js"></script>
+	<script src="js/app.js"></script>
+	<script src="controllers/bball.ctrl.js"></script>
+	<script src="controllers/ballnights.ctrl.js"></script>
+	<script src="controllers/dashboard.ctrl.js"></script>
+	<script src="controllers/menu.ctrl.js"></script>
+	<script src="controllers/ballnightactions.ctrl.js"></script>
+	<script src="controllers/myprofile.ctrl.js"></script>
+	<script src="controllers/players.ctrl.js"></script>
+	<script src="controllers/playerstatus.ctrl.js"></script>
+	<script src="controllers/registration.ctrl.js"></script>
+	<script src="controllers/rostercount.ctrl.js"></script>
+	<script src="controllers/waitlist.ctrl.js"></script>
+	<script src="controllers/ballnightdetails.ctrl.js"></script>
+	<script src="directives/bball.dir.js"></script>
+	<script src="services/authentication.fac.js"></script>
+	<script src="services/players.fac.js"></script>
+	
+
+</body>
+</html>

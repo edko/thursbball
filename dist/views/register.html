@@ -1,0 +1,56 @@
+<div layout="row" layout-align="center center" class="container">
+
+  	<div flex="30" flex-lg="30" flex-gt-md="30" flex-md="30" flex-sm="40" flex-xs="70">
+		<div layout="column" layout-align="center center">
+			<div>
+				<span flex></span>
+				<img src="images/logo.png" flex="100">
+				<span flex></span>
+			</div>
+		</div>
+
+		<div>
+			{{ message }}
+			<form name="registerForm" ng-submit="register()" layout="column" novalidate>
+				<md-input-container class="md-block">
+					<label>First Name</label>
+					<input ng-model="user.firstname" type="text" ng-required="true">
+				</md-input-container>
+				<md-input-container class="md-block">
+					<label>Last Name</label>
+					<input ng-model="user.lastname" type="text" ng-required="true">
+				</md-input-container>
+				<md-input-container class="md-block">
+					<label>Email</label>
+					<input ng-model="user.email" type="email" ng-required="true">
+				</md-input-container>
+				
+				<md-input-container class="md-block">
+					<label>Password</label>
+					<input ng-model="user.password" type="password" ng-required="true">
+				</md-input-container>
+				
+				<md-input-container>
+					<md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="currentUser.SMS" class="md-primary">
+	            		<span style="font-size: 13px;color: rgba(0,0,0,0.54)">Agree to receive text notifications.</span>
+	          		</md-checkbox>
+				</md-input-container>
+				<md-input-container ng-hide="!currentUser.SMS" flex>
+					<label>Mobile</label>
+					<input name="mobile" ng-model="currentUser.mobile" 
+						ng-required="currentUser.SMS"			
+						minlength="12" 
+	         			maxlength="12" 
+						ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" />
+					<div class="hint">###-###-####</div>
+				</md-input-container>
+				<div layout="row">
+					<md-button class="md-raised md-primary" type="submit" ng-disabled="registerForm.$invalid" flex="100">Sign up</md-button>
+					<md-button ng-href="#/login">Login</md-button>		
+				</div>	
+			</form>	
+		</div>
+	
+	</div>
+</div>
+

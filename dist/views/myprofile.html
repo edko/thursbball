@@ -1,0 +1,86 @@
+<md-toolbar layout="row" class="md-hue-3">
+	<div class="md-toolbar-tools">
+		<span>My Profile</span>
+	</div>
+</md-toolbar>
+
+<div ng-cloak>
+	<md-content>
+		<md-tabs md-dynamic-height md-border-bottom md-center-tabs="true">
+			<md-tab label="My Nights">
+				<md-content class="md-padding">
+					<div layout="row" layout-align="center top" class="container">
+						<md-content layout-padding>
+
+							<ul style="list-style: none;">
+								In the roster:
+								<li ng-repeat="night in myballnights">
+									<i class="mdi mdi-check-circle-outline mdi-18px mdi-dark" style="color:green;"></i>
+									{{ night.date | date: 'EEEE M/dd/yyyy' }}
+								</li>
+							</ul>
+							<ul style="list-style: none;">
+								In the waitlist:
+								<li ng-repeat="wait in mywaitlists">
+									<i class="mdi mdi-alert-circle-outline mdi-18px mdi-dark" style="color:red;"></i>
+									{{ wait.date | date: 'EEEE M/dd/yyyy' }}
+								</li>
+							</ul>
+		
+
+						</md-content>
+					</div>
+				</md-content>
+			</md-tab>
+
+			<md-tab label="Account">
+				<md-content class="md-padding">
+					<div layout="row" layout-align="center top" class="container">
+						<md-content layout-padding>
+							<form name="profile" ng-submit="saveProfile()" novalidate>
+								<div layout="row">
+									<md-input-container flex="50">
+										<label>First name</label>
+										<input ng-model="currentUser.first_name" type="text" ng-disabled="true">
+									</md-input-container>
+
+									<md-input-container flex="50">
+										<label>Last name</label>
+										<input ng-model="currentUser.last_name" type="text" ng-disabled="true">
+									</md-input-container>
+								</div>
+								<div layout="row">
+									<md-input-container flex="100">
+										<label>Email</label>
+										<input ng-model="currentUser.email" type="email" ng-disabled="true">
+									</md-input-container>
+								</div>
+								<div layout="column">
+									<md-input-container>
+										<md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="currentUser.SMS" class="md-primary">
+						            		<span style="font-size: 13px;color: rgba(0,0,0,0.54)">Agree to receive text notifications.</span>
+						          		</md-checkbox>
+									</md-input-container>
+									<md-input-container ng-hide="!currentUser.SMS" flex>
+										<label>Mobile</label>
+										<input name="mobile" ng-model="currentUser.mobile" 
+											ng-required="currentUser.SMS"			
+											minlength="12" 
+						         			maxlength="12" 
+											ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" />
+										<div class="hint">###-###-####</div>
+									</md-input-container>
+								</div>
+								<div>
+									<md-button class="md-primary md-raised" ng-disabled="profile.$invalid" type="submit">Save</md-button>
+								</div>
+							</form>
+						</md-content>
+					</div>
+
+				</md-content>
+			</md-tab>
+		</md-tabs>
+	</md-content>
+</div>
+

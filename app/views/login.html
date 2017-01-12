@@ -1,0 +1,38 @@
+<div layout="row" layout-align="center center" class="container">
+
+  	<div flex="30" flex-lg="30" flex-gt-md="30" flex-md="30" flex-sm="40" flex-xs="70">
+		<div layout="column" layout-align="center center">
+			<div style="margin-bottom: 50px;">
+				<img src="images/logo.png" flex="100">
+			</div>
+			<!-- <div>
+				<h3>Login - ThursBball App</h3>
+
+			</div> -->
+		</div>
+
+		<div>
+			{{ message }}
+			<form name="loginForm" ng-submit="login()" layout="column" novalidate>
+				<md-input-container class="md-block">
+					<label>Email</label>
+					<input ng-model="user.email" type="email" ng-required="true">
+				</md-input-container>
+				<md-input-container class="md-block">
+					<label>Password</label>
+					<input ng-model="user.password" type="password" ng-required="true">
+				</md-input-container>
+				<div layout="row">
+					<md-button class="md-raised md-primary" type="submit" ng-disabled="loginForm.$invalid" flex="100">Login</md-button>
+					<!-- <md-button class="md-raised md-primary" ng-click="googleLogin()">Login with Google</md-button>	 -->
+				</div>
+				<div layout="row">
+					<md-button class="md-primary" ng-href="#/register" flex="50">Sign Up</md-button>
+					<md-button ng-href="#/resetpassword" flex="50">Reset Password</md-button>
+				</div>	
+			</form>
+		</div>
+	
+	</div>
+
+</div>

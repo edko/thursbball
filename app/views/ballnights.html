@@ -1,0 +1,28 @@
+<md-toolbar layout="row" class="md-hue-3">
+	<div class="md-toolbar-tools">
+		<span>ADMIN: Manage Bball Nights</span>
+	</div>
+</md-toolbar>
+<div layout="row" layout-align="center top">
+	<div flex="30" flex-lg="30" flex-gt-md="30" flex-md="30" flex-sm="40" flex-xs="70">
+		<form name="bballnightForm" layout="column" novalidate>
+			<md-input-container>
+				<label>Enter date</label>
+				<md-datepicker ng-model="bballdate" ng-required="true"></md-datepicker>
+			</md-input-container>
+			<md-input-container>
+				<md-button class="md-primary" type="submit" ng-click="addBballNight()" ng-disabled="bballnightForm.$invalid">
+					Add New Date
+				</md-button>
+			</md-input-container>
+		</form>
+
+		<md-list-item class="secondary-button-padding" ng-repeat="(key,ballnight) in ballnights">
+			<p>
+				{{ ballnight.bball_date | date: 'M/dd/yyyy' }} 
+				{{ ballnight.counter }}/{{ ballnight.waitlistcounter }}
+			</p>
+			<md-button class="md-secondary" ng-click="deleteBballNight(key)" ng-disabled="true">Delete</md-button>
+		</md-list-item>
+	</div>
+</div>

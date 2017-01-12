@@ -1,0 +1,47 @@
+<md-card ng-repeat="ballnight in ballnights">
+	<md-card-header>
+		<md-card-header-text>
+			<player-status data="ballnight"></player-status>
+			{{ ballnight.bball_date | date: 'EEE M/dd/yyyy' }} 
+		</md-card-header-text>
+	</md-card-header>
+	<!-- <md-card-title>
+		<md-card-title-text>
+			<span class="md-headline"></span>
+		</md-card-title-text>
+	</md-card-title> -->
+
+	<!-- <ballnight-actions data="ballnight"></ballnight-actions> -->
+	<md-card-actions layout="row" layout-align="start center">
+		<md-card-icon-actions>
+
+			<md-button class="md-icon-button md-primary" ng-click="checkin(ballnight)" ng-disabled="ballnight.counter > 15" aria-label="add me">
+				<i class="mdi mdi-account-plus mdi-24px"></i>
+			</md-button>
+			
+			<md-button  class="md-icon-button md-primary" ng-click="checkout(ballnight)" aria-label="remove me">
+				<i class="mdi mdi-account-remove mdi-24px"></i>
+			</md-button>
+			<md-button class="md-icon-button md-primary" ng-click="waitlist(ballnight)" ng-show="ballnight.counter>15" aria-label="waitlist">
+            	<i class="mdi mdi-account-remove mdi-24px"></i>
+			</md-button>
+			<md-button  class="md-icon-button md-primary"ng-click="removewaitlist(ballnight)" ng-show="ballnight.counter>15" aria-label="remove waitlist">
+	            <i class="mdi mdi-account-remove mdi-24px"></i> 
+			</md-button>
+		</md-card-icon-actions>
+	</md-card-actions>
+	<md-card-content>
+		<md-button ng-click="showroster=true">Roster ({{ ballnight.counter }})</md-button>
+		<md-button ng-click="showroster=false">Waitlist ({{ ballnight.waitlistcounter }})</md-button>
+			
+		<div ng-show="showroster">
+			<players data="ballnight"></players>
+		</div>
+		<div ng-show="!showroster">
+			<waitlist data="ballnight"></waitlist>
+		</div>
+		
+	</md-card-content>
+
+	
+</md-card>
