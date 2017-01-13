@@ -1,4 +1,5 @@
-'use strict'
+(function(){
+'use strict';
 
 angular
 	.module('directive.players', [])
@@ -10,7 +11,7 @@ angular
 			},
 			templateUrl:'views/directives/players.dir.html',
 			controller: 'PlayersController'
-		}
+		};
 	})
 	.directive('rosterCount', function(){
 		return {
@@ -20,7 +21,7 @@ angular
 			},
 			templateUrl: 'views/directives/rostercount.dir.html',
 			controller: 'RosterCountController'
-		}
+		};
 	})
 	.directive('playerStatus', function(){
 		return {
@@ -30,7 +31,7 @@ angular
 			},
 			templateUrl: 'views/directives/playerstatus.dir.html',
 			controller: 'PlayerStatusController'
-		}
+		};
 	})
 	.directive('waitlist', function(){
 		return {
@@ -40,7 +41,7 @@ angular
 			},
 			templateUrl: 'views/directives/waitlist.dir.html',
 			controller: 'WaitlistController'
-		}
+		};
 	})
 	.directive('waitlistCount', function(){
 		return {
@@ -50,7 +51,7 @@ angular
 			},
 			templateUrl: 'views/directives/waitlistcount.dir.html',
 			controller: 'WaitlistController'
-		}
+		};
 	})
 	.directive('ballnightActions', function(){
 		return {
@@ -60,5 +61,7 @@ angular
 			},
 			templateUrl: 'views/directives/ballnightactions.dir.html',
 			controller: 'BallnightActionsController'
-		}
-	})
+		};
+	});
+
+})();

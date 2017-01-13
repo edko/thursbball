@@ -221,7 +221,9 @@ angular.module('bballapp').controller('DashboardController', ['$timeout','$rootS
 						return counter;
 					});
 				}).then(function(){
-					showToast('You have been removed from the waitlist!');
+					if(id === $rootScope.currentUser.$id) {
+						showToast('You have been removed from the waitlist!');
+					}
 				});
 			});
 		};
