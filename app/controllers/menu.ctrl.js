@@ -1,21 +1,24 @@
-'use strict'
+(function(){
+'use strict';
 
-app.controller('MenuController', ['$scope', '$mdSidenav', '$timeout', 'Authentication',
+angular.module('bballapp').controller('MenuController', ['$scope', '$mdSidenav', '$timeout', 'Authentication',
 	function($scope, $mdSidenav, $timeout, Authentication){
 
 		$scope.openSidebar = function(){
-			$mdSidenav('right').toggle()
-		}
+			$mdSidenav('right').toggle();
+		};
 		$scope.closeSidebar = function(){
-			$mdSidenav('right').close()
-		}
+			$mdSidenav('right').close();
+		};
 		$scope.logout = function(){
-			Authentication.logout()
-			$scope.closeSidebar()
+			Authentication.logout();
+			$scope.closeSidebar();
 		};
 
 		$scope.close = function(){
-			alert('closed')
-		}
+			alert('closed');
+		};
 
-	}])
+	}]);
+
+})();

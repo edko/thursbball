@@ -1,6 +1,7 @@
-'use strict'
+(function(){
+'use strict';
 
-app.factory('PlayersList', ['$rootScope', '$firebaseArray', '$firebaseObject',
+angular.module('bballapp').factory('PlayersList', ['$rootScope', '$firebaseArray', '$firebaseObject',
 	function($rootScope, $firebaseArray, $firebaseObject){
 
 		var service = {};
@@ -15,4 +16,6 @@ app.factory('PlayersList', ['$rootScope', '$firebaseArray', '$firebaseObject',
 		};
 		return service;
 
-}])
+}]);
+
+})();

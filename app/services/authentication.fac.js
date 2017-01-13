@@ -1,6 +1,7 @@
-'use strict'
+(function(){
+'use strict';
 
-app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject', '$state', '$mdToast',
+angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject', '$state', '$mdToast',
 	function($rootScope, $firebaseAuth, $firebaseObject, $state, $mdToast){
 		var auth = $firebaseAuth();
 		var ref = firebase.database().ref();
@@ -23,7 +24,8 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 				.hideDelay(2000)
 				.toastClass('my-error')
 			);
-		}
+		};
+
 		var myObject =  {
 			login: function(user){
 				auth.$signInWithEmailAndPassword(user.email, user.password).
@@ -31,13 +33,13 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 						$state.go('root.dash');
 					}).catch(function(error){
 						//$rootScope.message = error.message;
-						showToast(error.message)
+						showToast(error.message);
 					});
 			},
 			logout: function(){
 				auth.$signOut().then(function(){
-					$state.go('login')
-				})
+					$state.go('login');
+				});
 			},
 			requireAuth: function() {
 				return auth.$requireSignIn();
@@ -55,7 +57,7 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 						myObject.login(user);
 					}).catch(function(error){
 						// $rootScope.message = error.message;
-						showToast(error.message)
+						showToast(error.message);
 					});
 			},
 			resetPassword: function(user){
@@ -65,7 +67,7 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 			  			$state.go('login');
 					}).catch(function(error) {
 			  			// console.error("Error: ", error);
-			  			showToast(error.message)
+			  			showToast(error.message);
 					});
 
 			}
@@ -74,3 +76,5 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 		return myObject;
 
 	}]);
+
+})();

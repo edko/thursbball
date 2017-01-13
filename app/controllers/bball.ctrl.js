@@ -1,4 +1,8 @@
-app.controller('bballController', ['$scope', function($scope){
+(function(){
+"use strict";
 
-	$scope.message = 'this is a test'
-}])
+angular.module('bballapp').controller('bballController', ['$scope', function($scope){
+	$scope.message = 'this is a test';
+}]);
+
+})();

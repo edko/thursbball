@@ -1,4 +1,5 @@
-'use strict'
+(function () {
+'use strict';
 
 var app = angular.module('bballapp',['firebase', 'ui.router', 'ngMaterial', 'directive.players', 'mcwebb.twilio', 'angularAddToHomeScreen']);
 
@@ -15,7 +16,7 @@ var config = {
     storageBucket: "thursbballdev.appspot.com",
     messagingSenderId: "321805593752"
 
-}
+};
 
 firebase.initializeApp(config);
 
@@ -39,11 +40,11 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 				.position('top center')
 				.hideDelay(2000)
 				.toastClass('my-error')
-			)
+			);
 			$state.go('login');
 		}
 	});
-}])
+}]);
 
 angular.module("templates", []);
 
@@ -51,7 +52,7 @@ app.config(function($mdThemingProvider) {
 	$mdThemingProvider
 		.theme('default')
 		.primaryPalette('blue-grey')
-		.accentPalette('orange')
+		.accentPalette('orange');
 		// .backgroundPalette('blue-grey');
 })
 
@@ -63,12 +64,12 @@ app.config(function($mdThemingProvider) {
 		// live credentials
 		accountSid: 'ACafbb499229ea9c97adb62818ad96f125',
 		authToken: '49446639ec20a2a35fe0b85dd81baec6'
-	})
+	});
 })
 
 .config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider, $stateProvider){
 	
-	$urlRouterProvider.otherwise('/dashboard')
+	$urlRouterProvider.otherwise('/dashboard');
 
 	$stateProvider
 		.state('root', {
@@ -198,6 +199,8 @@ app.config(function($mdThemingProvider) {
 					return Authentication.requireAuth();
 				} //current Auth
 			} //resolve
-		})
+		});
 	}
-])
+]);
+
+})();

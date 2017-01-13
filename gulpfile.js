@@ -41,14 +41,14 @@ var paths = {
 	node_modules: "./node_modules/",
 	bower_components: "./bower_components/",
 	lib_destination: "./app/lib/"
-}
+};
 
 gulp.task('browserSync', function(){
 	browserSync.init({
 		server: {
 			baseDir: 'app'
 		}
-	})
+	});
 });
 
 gulp.task('watch', ['browserSync'], function(){
@@ -62,7 +62,7 @@ gulp.task('useref', function(){
 		.pipe(useref())
 		// .pipe(gulpIf('*.js', uglify()))
 		.pipe(gulpIf('*.css', cssnano()))
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest('dist'));
 });
 
 gulp.task('images', function(){
@@ -70,15 +70,15 @@ gulp.task('images', function(){
 		.pipe(cache(imagemin({
 			interlaced: true
 		})))
-		.pipe(gulp.dest('dist/images'))
+		.pipe(gulp.dest('dist/images'));
 });
 
 gulp.task('clean:dist', function(){
 	return del.sync('dist');
-})
+});
 
 gulp.task('cache:clear', function(callback){
-	return cache.clearAll(callback)
+	return cache.clearAll(callback);
 });
 
 // gulp.task('build', function(callback){
@@ -90,8 +90,8 @@ gulp.task('cache:clear', function(callback){
 
 gulp.task('fonts', function(){
 	gulp.src('./app/lib/fonts/*.*')
-		.pipe(gulp.dest('dist/fonts/'))
-})
+		.pipe(gulp.dest('dist/fonts/'));
+});
 
 gulp.task('copy:libs', function(){
 	var angular = gulp.src(paths.node_modules + 'angular/angular.min.js')
@@ -119,20 +119,20 @@ gulp.task('copy:libs', function(){
 		paths.node_modules + 'mdi/css/materialdesignicons.min.css.map'])
 		.pipe(gulp.dest(paths.lib_destination + "mdi"));
 	var mdifonts = gulp.src(paths.node_modules + "mdi/fonts/*.*")
-		.pipe(gulp.dest(paths.lib_destination + "fonts"))
+		.pipe(gulp.dest(paths.lib_destination + "fonts"));
 	var addhome = gulp.src(paths.bower_components + 'angular-add-to-home-screen/dist/*.*')
-		.pipe(gulp.dest(paths.lib_destination + 'angular-add-to-home-screen'))
-})
+		.pipe(gulp.dest(paths.lib_destination + 'angular-add-to-home-screen'));
+});
 
 gulp.task('views', function(){
 	gulp.src('./app/views/**/*')
-		.pipe(gulp.dest('dist/views/'))
-})
+		.pipe(gulp.dest('dist/views/'));
+});
 
 gulp.task('manifest', function(){
 	gulp.src('./app/manifest.json')
-		.pipe(gulp.dest('dist/'))
-})
+		.pipe(gulp.dest('dist/'));
+});
 /**
 * Takes html templates and transform them to angular templates (javascript)
 */
@@ -152,13 +152,13 @@ gulp.task('templates', function() {
 			* I'm keeping the directory structure for the template's name
 			*/
 			transformUrl: function(url) {
-				return url.replace(p.extname(url), '')
+				return url.replace(p.extname(url), '');
 			}
 		}))
 		//put all those to our javascript file
 		.pipe(concat('templates.js'))
-		.pipe(gulp.dest('./app/js'))
-})
+		.pipe(gulp.dest('./app/js'));
+});
 
 /**
 * Concat, closure, annotate, uglify scripts
@@ -178,15 +178,16 @@ gulp.task('scripts', ['templates'], function() {
          	console.log(e);
     	}))
 		.pipe(rename('main.min.js'))
-		.pipe(gulp.dest('./dist'))
-})
+		.pipe(gulp.dest('./dist'));
+});
+
 gulp.task('firebase', function(){
 	gulp.src('./app/lib/firebase/firebase.js')
-		.pipe(gulp.dest('./dist/lib/firebase/'))
-})
+		.pipe(gulp.dest('./dist/lib/firebase/'));
+});
 
-gulp.task('production', ['scripts', 'views', 'fonts', 'images', 'useref'])
+gulp.task('production', ['scripts', 'views', 'fonts', 'images', 'useref']);
 
 gulp.task('default', function(callback){
-	runSequence(['browserSync', 'watch'], callback)
+	runSequence(['browserSync', 'watch'], callback);
 });

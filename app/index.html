@@ -39,7 +39,11 @@
 </head>
 
 <body ng-controller="MenuController" layout="row" style="height: 100vh;">
-	
+	<div class="splash">
+		<div>
+			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+		</div>	
+	</div>
 	<div layout="column" flex>
 		<div ui-view="header"></div>
 		<div ui-view="sidenav"></div>
