@@ -1,8 +1,8 @@
 (function () {
 "use strict";
 
-angular.module('bballapp').controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
-	function($rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
+angular.module('bballapp').controller('DashboardController', ['$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
+	function($timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
 
 		$scope.title = "Calendar List";
 
@@ -64,6 +64,9 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 				checkoutDialog(date, event);
 			}).catch(function(error){
 				console.log(error);
+			});
+			$timeout(function(){
+				$scope.$apply();
 			});	
 		};
 
@@ -78,7 +81,7 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 				.ok('Yes')
 				.cancel('No');
 			$mdDialog.show(confirm).then(function() {
-				console.log('remove player');
+				// console.log('remove player');
 				removeBaller(date);
 			}, function() {
 				$scope.status = 'You decided to keep your record.';
@@ -158,7 +161,7 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 		};
 
 		var removeBaller =  function(date) {
-			console.log(date);
+			// console.log(date);
 			var refDel = rosterRef.child(date).child($rootScope.currentUser.$id);
 			var userDelRef = userRef.child($rootScope.currentUser.$id).child('mybballnights').child(date);
 			$firebaseObject(refDel).$remove().then(function(){
@@ -171,7 +174,6 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 					return counter;
 				});
 			}).then(function(){
-				console.log('addwaitlisttoroster');
 				addWaitlistToRoster(date);
 			}).then(function(){
 				showToast('You have been removed for this night!');
@@ -187,7 +189,7 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 				email: $rootScope.currentUser.email,
 				date: firebase.database.ServerValue.TIMESTAMP
 			};
-			console.log('tring to add to roster');
+			
 			return new Promise(function(resolve,reject) {
 				waitlistRef.child(date).child($rootScope.currentUser.$id).set(userData).then(function(){
 					userRef.child($rootScope.currentUser.$id).child('mywaitlists').child(date).set({
@@ -229,17 +231,12 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 				//check if baller is in the roster or not
 				rosterRef.child(date).child($rootScope.currentUser.$id).once('value').then(function(snapshot){
 					var exists = (snapshot.val() !== null);
-					console.log(exists);
+					// console.log(exists);
 					if(exists) {
 						resolve('user is in the roster');
 					} else {
 						reject('user is not in the roster');
 					}
-					// if(exists){
-					// 	resolve('user exists')
-					// } else {
-					// 	reject('user does not exist')
-					// }
 				});
 			});
 		};
@@ -248,7 +245,6 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 			return new Promise(function(resolve, reject) {
 				waitlistRef.child(date).child($rootScope.currentUser.$id).once('value').then(function(snapshot){
 					var exists = (snapshot.val() !== null);
-					console.log(exists);
 					if(exists) {
 						resolve('user is in the waitlist');
 					} else {
@@ -259,40 +255,25 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 		};
 
 		var addWaitlistToRoster = function(date) {
-			// checkRosterCount(date).then(function(){
-			// 	console.log('check waitlist count first')
-			// 	checkWaitlistCount(date)
-			// }).then(function(){
-			// 	console.log('there is waitlist')
-			// 	addWaitlistBallertoRoster(date)
-			// }).catch(function(){
-			// 	console.log('waitlist is empty')
-			// })
-
-			checkRosterCount(date).then(function(){
-				console.log('check waitlist count first');
-				checkWaitlistCount(date).then(function(){
-					addWaitlistBallertoRoster(date);
-				}).then(function(){
-					console.log('send TEXT message here');
-				}).catch(function(){
-					console.log('waitlist is empty');
-				});
-			}).catch(function(error){
-				console.log(error);
+			checkRosterCount(date)
+			.then(function(){
+				checkWaitlistCount(date);
+			}).then(function(){
+				addWaitlistBallertoRoster(date);
+			}).catch(function(){
+				// console.log(error);
 			});
 		};
 
 		var addWaitlistBallertoRoster = function(date){
 			// to do : need to add ballnight to user.mybballnights
-			console.log('will add waitlist to roster');
+			// console.log('will add waitlist to roster');
 			var key;
 			waitlistRef.child(date).orderByChild('date').limitToFirst(1).on('child_added', function(snapshot){
 				key = snapshot.getKey();
-				// console.log(key)
 			});
 			// copies waitlist to roster, then deletes waitlist node
-			console.log(key);
+			// console.log(key);
 			var waitlistPlayerRef = userRef.child(key);
 			var waitlistPlayer = $firebaseObject(waitlistPlayerRef);
 
@@ -302,7 +283,7 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 						waitlistPlayerRef.update({
 							date: firebase.database.ServerValue.TIMESTAMP
 						}).then(function(){
-							sendText(waitlistPlayer, date);
+							//sendText(waitlistPlayer, date);
 						}).then(function(){
 							ballnightsRef.child(date).child('counter').transaction(function(counter) {
 								if(counter === 0 || counter < 16) {
@@ -322,7 +303,6 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 					}
 				});
 			});
-
 		};
 
 		var checkRosterCount = function(date) {
@@ -330,9 +310,9 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 				ballnightsRef.child(date).once('value', function(snapshot){
 					var value = snapshot.val();
 					if (value.counter == 15) {
-						resolve('roster is 15, can add to it');
+						resolve('roster count is 15');
 					} else {
-						reject('roster not at 15 - reject');
+						reject('roster count is not 15');
 					}
 				});
 			});
@@ -344,9 +324,9 @@ angular.module('bballapp').controller('DashboardController', ['$rootScope','$fil
 					var value = snapshot.val();
 					// console.log(snapshot.val())
 					if (value.waitlistcounter > 0) {
-						resolve('can add waitlist to roster');
+						resolve('waitlist > 0');
 					} else {
-						reject('cannot add waitlist to roster');
+						reject('waitlist is empty');
 					}
 				});
 			});

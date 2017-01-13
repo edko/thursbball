@@ -675,7 +675,8 @@ angular.module('angularAddToHomeScreen')
 
   }]);
 
-'use strict'
+(function () {
+'use strict';
 
 var app = angular.module('bballapp',['firebase', 'ui.router', 'ngMaterial', 'directive.players', 'mcwebb.twilio', 'angularAddToHomeScreen']);
 
@@ -692,7 +693,7 @@ var config = {
     storageBucket: "thursbballdev.appspot.com",
     messagingSenderId: "321805593752"
 
-}
+};
 
 firebase.initializeApp(config);
 
@@ -716,11 +717,11 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 				.position('top center')
 				.hideDelay(2000)
 				.toastClass('my-error')
-			)
+			);
 			$state.go('login');
 		}
 	});
-}])
+}]);
 
 angular.module("templates", []);
 
@@ -728,7 +729,7 @@ app.config(["$mdThemingProvider", function($mdThemingProvider) {
 	$mdThemingProvider
 		.theme('default')
 		.primaryPalette('blue-grey')
-		.accentPalette('orange')
+		.accentPalette('orange');
 		// .backgroundPalette('blue-grey');
 }])
 
@@ -740,12 +741,12 @@ app.config(["$mdThemingProvider", function($mdThemingProvider) {
 		// live credentials
 		accountSid: 'ACafbb499229ea9c97adb62818ad96f125',
 		authToken: '49446639ec20a2a35fe0b85dd81baec6'
-	})
+	});
 }])
 
 .config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider, $stateProvider){
 	
-	$urlRouterProvider.otherwise('/dashboard')
+	$urlRouterProvider.otherwise('/dashboard');
 
 	$stateProvider
 		.state('root', {
@@ -875,74 +876,89 @@ app.config(["$mdThemingProvider", function($mdThemingProvider) {
 					return Authentication.requireAuth();
 				}] //current Auth
 			} //resolve
-		})
+		});
 	}
-])
-'use strict'
+]);
 
-app.controller('BallnightActionsController', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
+})();
+(function(){
+'use strict';
+
+angular.module('bballapp').controller('BallnightActionsController', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
 	
-	var rosterRef = firebase.database().ref().child('roster').child($scope.ballnight.bball_date)
+	var rosterRef = firebase.database().ref().child('roster').child($scope.ballnight.bball_date);
 	
-	$scope.roster = $firebaseArray(rosterRef)
+	$scope.roster = $firebaseArray(rosterRef);
 
 	$scope.roster.$watch(function() {
-    	$scope.rostercount = $scope.roster.length
-    })
+    	$scope.rostercount = $scope.roster.length;
+    });
 
 	$scope.checkin = function(){
-		console.log($scope.ballnight.bball_date)
+		console.log($scope.ballnight.bball_date);
 		// BallnightActions.checkin($scope.ballnight.bball_date)
-	}
+	};
 	
-}])
-'use strict'
+}]);
 
-app.controller('BallnightDetailController', ['$scope', '$rootScope', '$stateParams', '$firebaseArray',
+})();
+(function(){
+'use strict';
+
+angular.module('bballapp').controller('BallnightDetailController', ['$scope', '$rootScope', '$stateParams', '$firebaseArray',
 	function($scope, $rootScope, $stateParams, $firebaseArray) {
 
-	var date = $stateParams.date
+	var date = $stateParams.date;
 
-	$scope.date = date
+	$scope.date = date;
 
-	var rosterRef = firebase.database().ref().child('roster').child(date).orderByChild('date')
-	var waitlistRef = firebase.database().ref().child('waitlist').child(date).orderByChild('date')
-	$scope.players = $firebaseArray(rosterRef)
-	$scope.waitlist = $firebaseArray(waitlistRef)
+	var rosterRef = firebase.database().ref().child('roster').child(date).orderByChild('date');
+	var waitlistRef = firebase.database().ref().child('waitlist').child(date).orderByChild('date');
+	$scope.players = $firebaseArray(rosterRef);
+	$scope.waitlist = $firebaseArray(waitlistRef);
 
-}])
-'use strict'
+}]);
 
-app.controller('BallnightsController', [ '$scope', '$firebaseArray', '$firebaseObject', 
+}());
+(function(){
+'use strict';
+
+angular.module('bballapp').controller('BallnightsController', [ '$scope', '$firebaseArray', '$firebaseObject', 
 	function($scope, $firebaseArray, $firebaseObject){
-		var ballnightsRef = firebase.database().ref().child('bballnights')
+		var ballnightsRef = firebase.database().ref().child('bballnights');
 		
-		$scope.ballnights = $firebaseArray(ballnightsRef)
+		$scope.ballnights = $firebaseArray(ballnightsRef);
 
 		$scope.addBballNight = function(){ 
-			console.log('add ballnight')
-			var balldate = $scope.bballdate.getTime()
+			console.log('add ballnight');
+			var balldate = $scope.bballdate.getTime();
 			ballnightsRef.child(balldate).set({
 				bball_date: balldate,
 				timestamp: firebase.database.ServerValue.TIMESTAMP
 			}).then(function(){
-				$scope.bballdate = ''
-			})
-		}
+				$scope.bballdate = '';
+			});
+		};
 
 		$scope.deleteBballNight = function(key){
-			$scope.ballnights.$remove(key)
-		}
-}])
-app.controller('bballController', ['$scope', function($scope){
+			$scope.ballnights.$remove(key);
+		};
+}]);
 
-	$scope.message = 'this is a test'
-}])
-/*jslint node: true */
+})();
+(function(){
 "use strict";
 
-app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
-	function($rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
+angular.module('bballapp').controller('bballController', ['$scope', function($scope){
+	$scope.message = 'this is a test';
+}]);
+
+})();
+(function () {
+"use strict";
+
+angular.module('bballapp').controller('DashboardController', ['$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
+	function($timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
 
 		$scope.title = "Calendar List";
 
@@ -1004,6 +1020,9 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 				checkoutDialog(date, event);
 			}).catch(function(error){
 				console.log(error);
+			});
+			$timeout(function(){
+				$scope.$apply();
 			});	
 		};
 
@@ -1018,7 +1037,7 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 				.ok('Yes')
 				.cancel('No');
 			$mdDialog.show(confirm).then(function() {
-				console.log('remove player');
+				// console.log('remove player');
 				removeBaller(date);
 			}, function() {
 				$scope.status = 'You decided to keep your record.';
@@ -1098,7 +1117,7 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 		};
 
 		var removeBaller =  function(date) {
-			console.log(date);
+			// console.log(date);
 			var refDel = rosterRef.child(date).child($rootScope.currentUser.$id);
 			var userDelRef = userRef.child($rootScope.currentUser.$id).child('mybballnights').child(date);
 			$firebaseObject(refDel).$remove().then(function(){
@@ -1111,7 +1130,6 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 					return counter;
 				});
 			}).then(function(){
-				console.log('addwaitlisttoroster');
 				addWaitlistToRoster(date);
 			}).then(function(){
 				showToast('You have been removed for this night!');
@@ -1127,7 +1145,7 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 				email: $rootScope.currentUser.email,
 				date: firebase.database.ServerValue.TIMESTAMP
 			};
-			console.log('tring to add to roster');
+			
 			return new Promise(function(resolve,reject) {
 				waitlistRef.child(date).child($rootScope.currentUser.$id).set(userData).then(function(){
 					userRef.child($rootScope.currentUser.$id).child('mywaitlists').child(date).set({
@@ -1169,17 +1187,12 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 				//check if baller is in the roster or not
 				rosterRef.child(date).child($rootScope.currentUser.$id).once('value').then(function(snapshot){
 					var exists = (snapshot.val() !== null);
-					console.log(exists);
+					// console.log(exists);
 					if(exists) {
 						resolve('user is in the roster');
 					} else {
 						reject('user is not in the roster');
 					}
-					// if(exists){
-					// 	resolve('user exists')
-					// } else {
-					// 	reject('user does not exist')
-					// }
 				});
 			});
 		};
@@ -1188,7 +1201,6 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 			return new Promise(function(resolve, reject) {
 				waitlistRef.child(date).child($rootScope.currentUser.$id).once('value').then(function(snapshot){
 					var exists = (snapshot.val() !== null);
-					console.log(exists);
 					if(exists) {
 						resolve('user is in the waitlist');
 					} else {
@@ -1199,40 +1211,25 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 		};
 
 		var addWaitlistToRoster = function(date) {
-			// checkRosterCount(date).then(function(){
-			// 	console.log('check waitlist count first')
-			// 	checkWaitlistCount(date)
-			// }).then(function(){
-			// 	console.log('there is waitlist')
-			// 	addWaitlistBallertoRoster(date)
-			// }).catch(function(){
-			// 	console.log('waitlist is empty')
-			// })
-
-			checkRosterCount(date).then(function(){
-				console.log('check waitlist count first');
-				checkWaitlistCount(date).then(function(){
-					addWaitlistBallertoRoster(date);
-				}).then(function(){
-					console.log('send TEXT message here');
-				}).catch(function(){
-					console.log('waitlist is empty');
-				});
-			}).catch(function(error){
-				console.log(error);
+			checkRosterCount(date)
+			.then(function(){
+				checkWaitlistCount(date);
+			}).then(function(){
+				addWaitlistBallertoRoster(date);
+			}).catch(function(){
+				// console.log(error);
 			});
 		};
 
 		var addWaitlistBallertoRoster = function(date){
 			// to do : need to add ballnight to user.mybballnights
-			console.log('will add waitlist to roster');
+			// console.log('will add waitlist to roster');
 			var key;
 			waitlistRef.child(date).orderByChild('date').limitToFirst(1).on('child_added', function(snapshot){
 				key = snapshot.getKey();
-				// console.log(key)
 			});
 			// copies waitlist to roster, then deletes waitlist node
-			console.log(key);
+			// console.log(key);
 			var waitlistPlayerRef = userRef.child(key);
 			var waitlistPlayer = $firebaseObject(waitlistPlayerRef);
 
@@ -1242,7 +1239,7 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 						waitlistPlayerRef.update({
 							date: firebase.database.ServerValue.TIMESTAMP
 						}).then(function(){
-							sendText(waitlistPlayer, date);
+							//sendText(waitlistPlayer, date);
 						}).then(function(){
 							ballnightsRef.child(date).child('counter').transaction(function(counter) {
 								if(counter === 0 || counter < 16) {
@@ -1262,7 +1259,6 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 					}
 				});
 			});
-
 		};
 
 		var checkRosterCount = function(date) {
@@ -1270,9 +1266,9 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 				ballnightsRef.child(date).once('value', function(snapshot){
 					var value = snapshot.val();
 					if (value.counter == 15) {
-						resolve('roster is 15, can add to it');
+						resolve('roster count is 15');
 					} else {
-						reject('roster not at 15 - reject');
+						reject('roster count is not 15');
 					}
 				});
 			});
@@ -1284,9 +1280,9 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 					var value = snapshot.val();
 					// console.log(snapshot.val())
 					if (value.waitlistcounter > 0) {
-						resolve('can add waitlist to roster');
+						resolve('waitlist > 0');
 					} else {
-						reject('cannot add waitlist to roster');
+						reject('waitlist is empty');
 					}
 				});
 			});
@@ -1309,46 +1305,52 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 
 }]);
 
-'use strict'
+})();
 
-app.controller('MenuController', ['$scope', '$mdSidenav', '$timeout', 'Authentication',
+(function(){
+'use strict';
+
+angular.module('bballapp').controller('MenuController', ['$scope', '$mdSidenav', '$timeout', 'Authentication',
 	function($scope, $mdSidenav, $timeout, Authentication){
 
 		$scope.openSidebar = function(){
-			$mdSidenav('right').toggle()
-		}
+			$mdSidenav('right').toggle();
+		};
 		$scope.closeSidebar = function(){
-			$mdSidenav('right').close()
-		}
+			$mdSidenav('right').close();
+		};
 		$scope.logout = function(){
-			Authentication.logout()
-			$scope.closeSidebar()
+			Authentication.logout();
+			$scope.closeSidebar();
 		};
 
 		$scope.close = function(){
-			alert('closed')
-		}
+			alert('closed');
+		};
 
-	}])
-'use strict'
+	}]);
 
-app.controller('MyProfileController', [ '$scope', '$rootScope', '$firebaseObject', '$firebaseArray', '$mdToast',
+})();
+(function(){
+'use strict';
+
+angular.module('bballapp').controller('MyProfileController', [ '$scope', '$rootScope', '$firebaseObject', '$firebaseArray', '$mdToast',
 	function($scope, $rootScope, $firebaseArray, $firebaseObject, $mdToast){
 		// $scope.title = "My Profile"
 		
-		var userRef = firebase.database().ref().child('users').child($rootScope.currentUser.$id)
-		var mybballnightsRef = userRef.child('mybballnights')
-		var mywaitlistsRef = userRef.child('mywaitlists')
-		$scope.myballnights = $firebaseArray(mybballnightsRef)
-		$scope.mywaitlists = $firebaseArray(mywaitlistsRef)
+		var userRef = firebase.database().ref().child('users').child($rootScope.currentUser.$id);
+		var mybballnightsRef = userRef.child('mybballnights');
+		var mywaitlistsRef = userRef.child('mywaitlists');
+		$scope.myballnights = $firebaseArray(mybballnightsRef);
+		$scope.mywaitlists = $firebaseArray(mywaitlistsRef);
 
 		$scope.saveProfile = function(){
-			console.log($scope.currentUser.$id)
+			console.log($scope.currentUser.$id);
 			var userData = {
 				mobile: $scope.currentUser.mobile,
 				SMS: $scope.currentUser.SMS,
 				date: firebase.database.ServerValue.TIMESTAMP
-			}
+			};
 			userRef.update(userData).then(function(){
 				$mdToast.show(
 					$mdToast.simple()
@@ -1356,12 +1358,15 @@ app.controller('MyProfileController', [ '$scope', '$rootScope', '$firebaseObject
 					.position('top left')
 					.hideDelay(2000)
 				);
-			})
-		}
-}])
-'use strict'
+			});
+		};
+}]);
 
-app.controller('PlayersController', ['$scope', '$firebaseArray', 'PlayersList', function($scope, $firebaseArray, PlayersList) {
+})();
+(function(){
+'use strict';
+
+angular.module('bballapp').controller('PlayersController', ['$scope', '$firebaseArray', 'PlayersList', function($scope, $firebaseArray, PlayersList) {
 	
 	// var date = $scope.bballnightdetail
 	// console.log('from directive' + date)
@@ -1370,93 +1375,104 @@ app.controller('PlayersController', ['$scope', '$firebaseArray', 'PlayersList', 
 	// var rosterRef = firebase.database().ref().child('roster').child(date).orderByChild('date')
 	// $scope.players = $firebaseArray(rosterRef)
 
-	var date = ''
+	var date = '';
 	$scope.text = '';
 	$scope.$on('data_shared',function(){
 		var balldateObj =  PlayersList.getData();    
 		date = balldateObj.bball_date;
-		console.log('controller date is ' + date)
-		return getPlayers(date)
+		console.log('controller date is ' + date);
+		return getPlayers(date);
 		
-	})
+	});
 
 	var getPlayers = function(date) {
 		return new Promise(function(resolve,reject) {
-			var rosterRef = firebase.database().ref().child('roster').child(date).orderByChild('date')
-			var players = $firebaseArray(rosterRef)
+			var rosterRef = firebase.database().ref().child('roster').child(date).orderByChild('date');
+			var players = $firebaseArray(rosterRef);
 			players.$loaded().then(function(){
-				console.log('players loaded')
-				resolve('loaded')
-				$scope.players = players
+				console.log('players loaded');
+				resolve('loaded');
+				$scope.players = players;
 			}).catch(function(){
-				reject('error')
-			})
-		}) 
-	}
+				reject('error');
+			});
+		});
+	};
 
-}])
-'use strict'
+}]);
 
-app.controller('PlayerStatusController', ['$rootScope','$scope', '$firebaseObject', 
+})();
+(function(){
+'use strict';
+
+angular.module('bballapp').controller('PlayerStatusController', ['$rootScope','$scope', '$firebaseObject', 
 	function($rootScope, $scope, $firebaseObject){
 
-		var userRef = firebase.database().ref().child('users').child($rootScope.currentUser.$id).child('mybballnights').child($scope.ballnight.bball_date)
-		var waitlistRef = firebase.database().ref().child('users').child($rootScope.currentUser.$id).child('mywaitlists').child($scope.ballnight.bball_date)
+		var userRef = firebase.database().ref().child('users').child($rootScope.currentUser.$id).child('mybballnights').child($scope.ballnight.bball_date);
+		var waitlistRef = firebase.database().ref().child('users').child($rootScope.currentUser.$id).child('mywaitlists').child($scope.ballnight.bball_date);
 		
-		$scope.playerInRoster = $firebaseObject(userRef)
-		$scope.playerInWaitlist = $firebaseObject(waitlistRef)
+		$scope.playerInRoster = $firebaseObject(userRef);
+		$scope.playerInWaitlist = $firebaseObject(waitlistRef);
 
-}])
+}]);
 
+})();
 
-'use strict'
+(function(){
+'use strict';
 
-app.controller('RegistrationController', ['$scope', 'Authentication', '$firebaseObject', '$mdToast',
+angular.module('bballapp').controller('RegistrationController', ['$scope', 'Authentication', '$firebaseObject', '$mdToast',
 	function($scope, Authentication, $firebaseObject, $mdToast){
 		$scope.register = function(){
-			Authentication.register($scope.user)
-		}
+			Authentication.register($scope.user);
+		};
 		$scope.login = function(){
 			Authentication.login($scope.user);
-		}
+		};
 		$scope.logout = function(){
-			Authentication.logout()
-			target.blur()
-		}
+			Authentication.logout();
+			target.blur();
+		};
 		$scope.passwordReset = function(){
-			Authentication.resetPassword($scope.user)
-		}
+			Authentication.resetPassword($scope.user);
+		};
 
-	}])
-'use strict'
+	}]);
 
-app.controller('RosterCountController', [ '$scope', '$firebaseArray', 
+})();
+(function(){
+'use strict';
+
+angular.module('bballapp').controller('RosterCountController', [ '$scope', '$firebaseArray', 
 	function($scope, $firebaseArray){
 
-		var rosterRef = firebase.database().ref().child('roster').child($scope.ballnight.bball_date)
+		var rosterRef = firebase.database().ref().child('roster').child($scope.ballnight.bball_date);
 	
-		$scope.roster = $firebaseArray(rosterRef)
+		$scope.roster = $firebaseArray(rosterRef);
 
 		$scope.roster.$watch(function() {
-    		$scope.rostercount = $scope.roster.length
-    	})
+    		$scope.rostercount = $scope.roster.length;
+    	});
+}]);
 
+})();
+(function(){
+'use strict';
 
-}])
-'use strict'
-
-app.controller('WaitlistController', [ '$scope', '$firebaseArray', 
+angular.module('bballapp').controller('WaitlistController', [ '$scope', '$firebaseArray', 
 	function($scope, $firebaseArray){
 
-		var waitlistRef = firebase.database().ref().child('waitlist').child($scope.ballnight.bball_date).orderByChild('date')
+		var waitlistRef = firebase.database().ref().child('waitlist').child($scope.ballnight.bball_date).orderByChild('date');
 
-		$scope.waitlistplayers = $firebaseArray(waitlistRef)
+		$scope.waitlistplayers = $firebaseArray(waitlistRef);
 
 		$scope.waitlistplayers.$watch(function() {
-			$scope.waitlistcount = $scope.waitlistplayers.length
-		})
+			$scope.waitlistcount = $scope.waitlistplayers.length;
+		});
 
-	}])
+	}]);
+
+})();
 'use strict'
 
 angular
@@ -1521,9 +1537,10 @@ angular
 			controller: 'BallnightActionsController'
 		}
 	})
-'use strict'
+(function(){
+'use strict';
 
-app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject', '$state', '$mdToast',
+angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject', '$state', '$mdToast',
 	function($rootScope, $firebaseAuth, $firebaseObject, $state, $mdToast){
 		var auth = $firebaseAuth();
 		var ref = firebase.database().ref();
@@ -1546,7 +1563,8 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 				.hideDelay(2000)
 				.toastClass('my-error')
 			);
-		}
+		};
+
 		var myObject =  {
 			login: function(user){
 				auth.$signInWithEmailAndPassword(user.email, user.password).
@@ -1554,13 +1572,13 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 						$state.go('root.dash');
 					}).catch(function(error){
 						//$rootScope.message = error.message;
-						showToast(error.message)
+						showToast(error.message);
 					});
 			},
 			logout: function(){
 				auth.$signOut().then(function(){
-					$state.go('login')
-				})
+					$state.go('login');
+				});
 			},
 			requireAuth: function() {
 				return auth.$requireSignIn();
@@ -1578,7 +1596,7 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 						myObject.login(user);
 					}).catch(function(error){
 						// $rootScope.message = error.message;
-						showToast(error.message)
+						showToast(error.message);
 					});
 			},
 			resetPassword: function(user){
@@ -1588,7 +1606,7 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 			  			$state.go('login');
 					}).catch(function(error) {
 			  			// console.error("Error: ", error);
-			  			showToast(error.message)
+			  			showToast(error.message);
 					});
 
 			}
@@ -1597,9 +1615,12 @@ app.factory('Authentication', ['$rootScope', '$firebaseAuth', '$firebaseObject',
 		return myObject;
 
 	}]);
-'use strict'
 
-app.factory('PlayersList', ['$rootScope', '$firebaseArray', '$firebaseObject',
+})();
+(function(){
+'use strict';
+
+angular.module('bballapp').factory('PlayersList', ['$rootScope', '$firebaseArray', '$firebaseObject',
 	function($rootScope, $firebaseArray, $firebaseObject){
 
 		var service = {};
@@ -1614,4 +1635,6 @@ app.factory('PlayersList', ['$rootScope', '$firebaseArray', '$firebaseObject',
 		};
 		return service;
 
-}])
+}]);
+
+})();
