@@ -21,6 +21,7 @@
 	</md-subheader>
 	<md-content layout-wrap style="height: 40vh">
 		<md-list-item ng-repeat="ballnight in ballnights" ng-click="go(ballnight.bball_date)">
+
 			<div class="md-list-item-text">
 				
 				<player-status data="ballnight"></player-status>
@@ -29,7 +30,11 @@
 				<span style="font-size: 11px; padding-bottom: 10px;">
 					<roster-count data="ballnight"></roster-count>	
 					<waitlist-count data="ballnight"></waitlist-count>
+					<md-tooltip md-direction="bottom">
+						Click here to see night details
+					</md-tooltip>
 				</span>	
+				
 			</div>	
 			
 			<span flex></span>

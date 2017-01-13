@@ -1,11 +1,14 @@
 'use strict'
 
-app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', 'PlayersList', '$mdDialog',
-	function($rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, PlayersList, $mdDialog){
+app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
+	function($rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
 
 		$scope.title = "Calendar List"
+
+		var newDate = Date.now() - (24*60*60*1000)  // current day minus 1 day
+		
 		var ref = firebase.database().ref()
-		var ballnightsRef = firebase.database().ref().child('bballnights')
+		var ballnightsRef = firebase.database().ref().child('bballnights')//.orderByChild('bball_date')//.startAt(newDate)
 		var rosterRef = firebase.database().ref().child('roster');
 		var waitlistRef = firebase.database().ref().child('waitlist');
 		var userRef = firebase.database().ref().child('users')
@@ -19,9 +22,31 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 
 		$scope.ballnights = $firebaseArray(ballnightsRef)
 
-		$scope.selectedBallnight = function(bballnight) {
-			PlayersList.sendData(bballnight)
-		}		
+		function formatMobile(mobile){
+			mobile = "+1" + mobile.replace(/-/g, "")
+			return mobile
+		}
+
+		var sendText = function(user, date){
+			if (user.SMS == true) {
+				var mobile = formatMobile(user.mobile)
+				var date = $filter('date')(date, "M/dd/yyyy");
+				console.log('sending text to ' + mobile)
+				Twilio.create('Messages', {
+	            	// From: '+15005550006',
+	            	// To: '+15005550004',
+					From: '+16264276815',
+					To: mobile,
+					Body: "Hey " + user.first_name + ", you are in for " + date + ". from ThursBball"
+	        	})
+	        	.success(function (data, status, headers, config) {
+	            	// Success - do something
+	        	})
+	        	.error(function (data, status, headers, config) {
+	            	// Failure - do something
+	        	});
+			} 
+		}	
 
 		$scope.checkin = function(ballnight){
 			var date = ballnight.bball_date
@@ -118,9 +143,11 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 			}).then(function(){
 				rosterRef.child(date).child($rootScope.currentUser.$id).set(userData)
 			}).then(function(){
-					addToMyBballNights(date,$rootScope.currentUser.$id)
+				addToMyBballNights(date,$rootScope.currentUser.$id)
 			}).then(function(){
 				showToast('You have been added for this night!')
+			}).then(function(){
+				//sendText($rootScope.currentUser, date);
 			})
 
 		}
@@ -262,22 +289,33 @@ app.controller('DashboardController', ['$rootScope','$filter' ,'$scope','Authent
 			})    
 			// copies waitlist to roster, then deletes waitlist node
 			console.log(key)
+			var waitlistPlayerRef = userRef.child(key)
+			var waitlistPlayer = $firebaseObject(waitlistPlayerRef)
+
 			waitlistRef.child(date).child(key).once('value', function(snap){
 				rosterRef.child(date).child(key).set(snap.val(), function(error){
 					if(!error){
-						rosterRef.child(date).child(key).update({
+						waitlistPlayerRef.update({
 							date: firebase.database.ServerValue.TIMESTAMP
+						}).then(function(){
+							sendText(waitlistPlayer, date)
+						}).then(function(){
+							ballnightsRef.child(date).child('counter').transaction(function(counter) {
+								if(counter == 0 || counter < 16) {
+									counter = counter + 1;
+								}
+								return counter;	
+							})	
+						}).then(function(){
+							addToMyBballNights(date,key)
+						}).then(function(){
+							removeBallerFromWaitlist(key, date)
+						}).catch(function(error){
+							console.log(error)
 						})
-						ballnightsRef.child(date).child('counter').transaction(function(counter) {
-							if(counter == 0 || counter < 16) {
-								counter = counter + 1;
-							}
-							return counter;
-						})
-						addToMyBballNights(date,key)
-						//waitlistRef.child(date).child(key).remove(); 
-						removeBallerFromWaitlist(key, date)
-					} else if(typeof(console) !== 'undefined' && console.error ) {
+					
+						
+					} else if(typeof(console) !== 'undefined' && console.error){
 						console.error(error); 
 					}
 				});

@@ -19,7 +19,17 @@ var config = {
 
 firebase.initializeApp(config);
 
-app.run(['$rootScope', '$state', '$mdToast', function($rootScope, $state, $mdToast) {
+app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToast) {
+
+	// $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
+	// 	if (toState.authenticate && !$rootScope.currentUser){
+	// 		// User isn’t authenticated
+	// 		console.log('not logged in')
+	// 		$state.transitionTo("login");
+	// 		event.preventDefault(); 
+	// 	}
+	// });
+
 	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
 		if (error=='AUTH_REQUIRED') {
 			// $rootScope.message = 'Sorry, you must log in to access that page';
@@ -83,19 +93,22 @@ app.config(function($mdThemingProvider) {
 		.state('login', {
 			url: '/login',
 			templateUrl: 'views/login.html',
-			controller: 'RegistrationController'
+			controller: 'RegistrationController',
+			authenticate: false
 		})
 		
 		.state('register', {
 			url: '/register',
 			templateUrl: 'views/register.html',
-			controller: 'RegistrationController'
+			controller: 'RegistrationController',
+			authenticate: false
 		})
 		
 		.state('resetpassword', {
 			url: '/resetpassword',
 			templateUrl: 'views/resetpassword.html',
-			controller: 'RegistrationController'
+			controller: 'RegistrationController',
+			authenticate: false
 		})
 
 		.state('root.dash', {
@@ -106,11 +119,12 @@ app.config(function($mdThemingProvider) {
 					controller: 'DashboardController'
 				}
 			},
-			resolve: {
-				currentAuth: function(Authentication) {
-					return Authentication.requireAuth();
-				} //current Auth
-			} //resolve
+			authenticate: true
+			// resolve: {
+			// 	currentAuth: function(Authentication) {
+			// 		return Authentication.requireAuth();
+			// 	} //current Auth
+			// } //resolve
 		})
 
 		.state('root.dash.ballnight', {
@@ -120,7 +134,8 @@ app.config(function($mdThemingProvider) {
 					templateUrl: 'views/ballnightdetail.html',
 					controller: 'BallnightDetailController'
 				}
-			}
+			},
+			authenticate: true
 		})
 		
 		.state('root.about', {
@@ -129,7 +144,8 @@ app.config(function($mdThemingProvider) {
 				'@':{
 					templateUrl: 'views/about.html'
 				}	
-			}
+			},
+			authenticate: true
 		})
 		
 		.state('root.contact', {
@@ -138,7 +154,9 @@ app.config(function($mdThemingProvider) {
 				'@':{
 					templateUrl: 'views/contact.html'
 				}	
-			}	
+			},
+			authenticate: true
+
 		})
 
 		.state('root.faq', {
@@ -147,7 +165,8 @@ app.config(function($mdThemingProvider) {
 				'@':{
 					templateUrl: 'views/faq.html'
 				}	
-			}	
+			},
+			authenticate: true
 		})
 
 		.state('root.ballnights', {
@@ -158,11 +177,12 @@ app.config(function($mdThemingProvider) {
 					controller: 'BallnightsController'
 				}
 			},
-			resolve: {
-				currentAuth: function(Authentication) {
-					return Authentication.requireAuth();
-				} //current Auth
-			} //resolve
+			authenticate: true
+			// resolve: {
+			// 	currentAuth: function(Authentication) {
+			// 		return Authentication.requireAuth();
+			// 	} //current Auth
+			// } //resolve
 		})
 		
 		.state('root.myprofile', {
