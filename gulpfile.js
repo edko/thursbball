@@ -18,6 +18,7 @@ var p = require('path');
 var pump = require('pump');
 var babel  = require('gulp-babel');
 var es2015 = require('babel-preset-es2015');
+var gulpNgConfig = require('gulp-ng-config');
 
 var paths = {
 	javascripts: [
@@ -42,6 +43,22 @@ var paths = {
 	bower_components: "./bower_components/",
 	lib_destination: "./app/lib/"
 };
+
+gulp.task('config', function () {
+	gulp.src('config.json')
+		.pipe(gulpNgConfig('bballapp.config', {
+			environment: 'local'
+		}))
+		.pipe(gulp.dest('app/js'));
+});
+
+gulp.task('config:prod', function () {
+	gulp.src('config.json')
+		.pipe(gulpNgConfig('bballapp.config', {
+			environment: 'production'
+		}))
+		.pipe(gulp.dest('app/js'));
+});
 
 gulp.task('browserSync', function(){
 	browserSync.init({

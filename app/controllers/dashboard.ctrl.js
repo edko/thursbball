@@ -1,8 +1,8 @@
 (function () {
 "use strict";
 
-angular.module('bballapp').controller('DashboardController', ['$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
-	function($timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
+angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
+	function(ENV, $timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
 
 		$scope.title = "Calendar List";
 
@@ -34,9 +34,7 @@ angular.module('bballapp').controller('DashboardController', ['$timeout','$rootS
 				var bdate = $filter('date')(date, "M/dd/yyyy");
 				console.log('sending text to ' + mobile);
 				Twilio.create('Messages', {
-	            	// From: '+15005550006',
-	            	// To: '+15005550004',
-					From: '+16264276815',
+					From: ENV.twilio.phone,
 					To: mobile,
 					Body: "Hey " + user.first_name + ", you are in for " + bdate + ". from ThursBball"
 	        	})
@@ -149,7 +147,7 @@ angular.module('bballapp').controller('DashboardController', ['$timeout','$rootS
 			}).then(function(){
 				showToast('You have been added for this night!');
 			}).then(function(){
-				//sendText($rootScope.currentUser, date);
+				sendText($rootScope.currentUser, date);
 			});
 		};
 
