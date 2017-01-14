@@ -10,7 +10,6 @@
 	<!-- build:css css/css.css -->
 	<link rel="stylesheet" type="text/css" href="./lib/angular-material/angular-material.css">
 	<link rel="stylesheet" type="text/css" href="./lib/mdi/materialdesignicons.css">
-	<link rel="stylesheet" type="text/css" href="./lib/angular-add-to-home-screen/aaths.css">
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 	<!-- endbuild -->
 
@@ -39,11 +38,15 @@
 </head>
 
 <body ng-controller="MenuController" layout="row" style="height: 100vh;">
-	<div class="splash">
-		<div>
+	<!-- div class="splash" flex>
+		<h2>Loading...</h2>
+		<div style="border: 1px solid red;color:#000;">
+			<h2>Loading...</h2>
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>	
-	</div>
+	</div> -->
+	<!-- <spinner name="booksSpinner" img-src="spinner.gif"></spinner> -->
+	
 	<div layout="column" flex>
 		<div ui-view="header"></div>
 		<div ui-view="sidenav"></div>
@@ -52,7 +55,7 @@
 		</md-content>
 	</div>
 
-	<script src="//cdn.jsdelivr.net/ua-parser.js/0.7.3/ua-parser.js"></script>
+
 	<script src="./lib/angular/angular.js"></script>
 	<script src="./lib/angular-ui-router/angular-ui-router.js"></script>
 	<script src="./lib/firebase/firebase.js"></script>
@@ -61,7 +64,7 @@
 	<script src="./lib/angular-aria/angular-aria.js"></script>
 	<script src="./lib/angular-material/angular-material.js"></script>
 	<script src="./lib/angular-twilio/angular-twilio.js"></script>
-	<script src="./lib/angular-add-to-home-screen/angular-add-to-home-screen.js"></script>
+	<script src="./lib/angular-spinners/angular-spinners.min.js"></script>
 	<script src="js/config.js"></script>
 	<script src="js/app.js"></script>
 	<script src="controllers/bball.ctrl.js"></script>

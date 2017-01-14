@@ -1,7 +1,7 @@
 (function () {
 'use strict';
 
-var app = angular.module('bballapp',['bballapp.config','firebase', 'ui.router', 'ngMaterial', 'directive.players', 'mcwebb.twilio', 'angularAddToHomeScreen']);
+var app = angular.module('bballapp',['angularSpinners','bballapp.config','firebase', 'ui.router', 'ngMaterial', 'directive.players', 'mcwebb.twilio']);
 
 app.config(['ENV', function(ENV) {
 	firebase.initializeApp({

@@ -675,39 +675,25 @@ angular.module('angularAddToHomeScreen')
 
   }]);
 
+angular.module("bballapp.config", [])
+.constant("ENV", {"firebase":{"apiKey":"AIzaSyAMCzHhniQmZjSp0E2xI2Gp9MxXy0ANZXk","authDomain":"thursbball.firebaseapp.com","databaseURL":"https://thursbball.firebaseio.com","storageBucket":"thursbball.appspot.com","messagingSenderId":"379104990436"},"twilio":{"accountSid":"ACafbb499229ea9c97adb62818ad96f125","authToken":"49446639ec20a2a35fe0b85dd81baec6","phone":"+16264276815"}});
+
 (function () {
 'use strict';
 
-var app = angular.module('bballapp',['firebase', 'ui.router', 'ngMaterial', 'directive.players', 'mcwebb.twilio', 'angularAddToHomeScreen']);
+var app = angular.module('bballapp',['bballapp.config','firebase', 'ui.router', 'ngMaterial', 'directive.players', 'mcwebb.twilio', 'angularAddToHomeScreen']);
 
-var config = {
-	// apiKey: "AIzaSyAMCzHhniQmZjSp0E2xI2Gp9MxXy0ANZXk",
-	// authDomain: "thursbball.firebaseapp.com",
-	// databaseURL: "https://thursbball.firebaseio.com",
-	// storageBucket: "thursbball.appspot.com",
-	// messagingSenderId: "379104990436"
-
-    apiKey: "AIzaSyAJJKttiMY0vKV0H97Cod2bUcgerkkeSfg",
-    authDomain: "thursbballdev.firebaseapp.com",
-    databaseURL: "https://thursbballdev.firebaseio.com",
-    storageBucket: "thursbballdev.appspot.com",
-    messagingSenderId: "321805593752"
-
-};
-
-firebase.initializeApp(config);
+app.config(['ENV', function(ENV) {
+	firebase.initializeApp({
+		apiKey: ENV.firebase.apiKey,
+		authDomain: ENV.firebase.authDomain,
+		databaseURL: ENV.firebase.databaseURL,
+		storageBucket: ENV.firebase.storageBucket,
+		messagingSenderId: ENV.firebase.messagingSenderId
+	});
+}]);
 
 app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToast) {
-
-	// $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-	// 	if (toState.authenticate && !$rootScope.currentUser){
-	// 		// User isn’t authenticated
-	// 		console.log('not logged in')
-	// 		$state.transitionTo("login");
-	// 		event.preventDefault(); 
-	// 	}
-	// });
-
 	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
 		if (error=='AUTH_REQUIRED') {
 			// $rootScope.message = 'Sorry, you must log in to access that page';
@@ -721,11 +707,11 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 			$state.go('login');
 		}
 	});
-}]);
+}])
 
-angular.module("templates", []);
+// angular.module("templates", []);
 
-app.config(["$mdThemingProvider", function($mdThemingProvider) {
+.config(["$mdThemingProvider", function($mdThemingProvider) {
 	$mdThemingProvider
 		.theme('default')
 		.primaryPalette('blue-grey')
@@ -733,14 +719,10 @@ app.config(["$mdThemingProvider", function($mdThemingProvider) {
 		// .backgroundPalette('blue-grey');
 }])
 
-.config(["TwilioProvider", function(TwilioProvider) {
+.config(['TwilioProvider', 'ENV', function(TwilioProvider, ENV) {
 	TwilioProvider.setCredentials({
-		// test credentials
-		// accountSid: 'ACbaa00689dcf44a4cadf354365f46cc38',
-		// authToken: '209bbd65706f14856bf709508455c9bb'
-		// live credentials
-		accountSid: 'ACafbb499229ea9c97adb62818ad96f125',
-		authToken: '49446639ec20a2a35fe0b85dd81baec6'
+		accountSid: ENV.twilio.accountSid,
+		authToken: ENV.twilio.authToken
 	});
 }])
 
@@ -957,8 +939,8 @@ angular.module('bballapp').controller('bballController', ['$scope', function($sc
 (function () {
 "use strict";
 
-angular.module('bballapp').controller('DashboardController', ['$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
-	function($timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
+angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
+	function(ENV, $timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
 
 		$scope.title = "Calendar List";
 
@@ -990,9 +972,7 @@ angular.module('bballapp').controller('DashboardController', ['$timeout','$rootS
 				var bdate = $filter('date')(date, "M/dd/yyyy");
 				console.log('sending text to ' + mobile);
 				Twilio.create('Messages', {
-	            	// From: '+15005550006',
-	            	// To: '+15005550004',
-					From: '+16264276815',
+					From: ENV.twilio.phone,
 					To: mobile,
 					Body: "Hey " + user.first_name + ", you are in for " + bdate + ". from ThursBball"
 	        	})
@@ -1105,7 +1085,7 @@ angular.module('bballapp').controller('DashboardController', ['$timeout','$rootS
 			}).then(function(){
 				showToast('You have been added for this night!');
 			}).then(function(){
-				//sendText($rootScope.currentUser, date);
+				sendText($rootScope.currentUser, date);
 			});
 		};
 

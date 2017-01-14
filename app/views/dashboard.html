@@ -4,6 +4,9 @@
 	</div>
 </md-toolbar> -->
 <section>
+	<div layout="row" layout-sm="column" layout-align="space-around" class="loading" ng-show="isLoading">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
 	<md-subheader class="md-primary">
 		<div layout="row" layout-align="end center">
 			<div>
@@ -20,8 +23,9 @@
 		</div>
 	</md-subheader>
 	<md-content layout-wrap style="height: 40vh">
-		<md-list-item ng-repeat="ballnight in ballnights" ng-click="go(ballnight.bball_date)">
-
+		<md-list-item ng-repeat="ballnight in ballnights" 
+				ng-click="go(ballnight.bball_date)" 
+				ng-style="ballnight.bball_date < today && {'background-color':'#4C4C4C'} || {'background-color': '#F2F2F2'}">
 			<div class="md-list-item-text">
 				
 				<player-status data="ballnight"></player-status>
@@ -42,7 +46,7 @@
 			<span ng-if="ballnight.counter<16">+{{ 16 - ballnight.counter}}</span>
 			<md-menu md-position-mode="target-right target" >
 				
-				<md-button class="md-icon-button" ng-click="$mdOpenMenu($event)" aria-label="actions">
+				<md-button class="md-icon-button" ng-click="$mdOpenMenu($event)" aria-label="actions" ng-disabled="ballnight.bball_date < today">
 					<md-icon class="mdi mdi-dots-vertical mdi-24px"></md-icon>
 				</md-button>
 				<md-menu-content width="4" >
@@ -80,22 +84,3 @@
 	</md-content>
 </section>
 <md-content ui-view="detail" style="height:44vh; border-top: 1px solid #cccccc;"></md-content>
-<!-- <md-content style="height:40%;" ng-controller="PlayersController"> -->
-	
-	<!-- <section>
-		<md-subheader class="md-primary">Players</md-subheader>
-		<md-list>
-			<md-list-item ng-repeat="player in players">
-				{{ player.first_name}} {{ player.last_name}} - {{ player.email }} - {{ player.date }}
-			</md-list-item>
-		</md-list>
-	</section> -->
-
-	
-    <!--   <div ng-repeat="player in players"
-          class="repeated-item" flex>
-        {{ player.first_name}} {{ player.last_name}} - {{ player.email }} - {{ player.date }}
-      </div> -->
-    
-
-<!-- </md-content> -->

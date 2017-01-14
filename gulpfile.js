@@ -29,7 +29,8 @@ var paths = {
 		'./app/lib/angular-aria/angular-aria.min.js',
 		'./app/lib/angular-material/angular-material.min.js',
 		'./app/lib/angular-twilio/angular-twilio.js',
-		'./app/lib/angular-add-to-home-screen/angular-add-to-home-screen.js',
+		'./app/lib/angular-spinners/angular-spinners.min.js',
+		'./app/js/config.js',
 		'./app/js/app.js',
 		'./app/controllers/*.js',
 		'./app/directives/*.js',
@@ -127,18 +128,16 @@ gulp.task('copy:libs', function(){
 		.pipe(gulp.dest(paths.lib_destination + "angular-material"));
 	var uirouter = gulp.src(paths.node_modules + 'angular-ui-router/release/angular-ui-router.min.js')
 		.pipe(gulp.dest(paths.lib_destination + "angular-ui-router"));
-
 	var twilio = gulp.src(paths.bower_components + "angular-twilio/angular-twilio.js")
 		.pipe(gulp.dest(paths.lib_destination + "angular-twilio"));
-	
 	var mdi = gulp.src([
 		paths.node_modules + 'mdi/css/materialdesignicons.min.css',
 		paths.node_modules + 'mdi/css/materialdesignicons.min.css.map'])
 		.pipe(gulp.dest(paths.lib_destination + "mdi"));
 	var mdifonts = gulp.src(paths.node_modules + "mdi/fonts/*.*")
 		.pipe(gulp.dest(paths.lib_destination + "fonts"));
-	var addhome = gulp.src(paths.bower_components + 'angular-add-to-home-screen/dist/*.*')
-		.pipe(gulp.dest(paths.lib_destination + 'angular-add-to-home-screen'));
+	var spinners = gulp.src(paths.node_modules + "angular-spinners/dist/angular-spinners.min.js")
+		.pipe(gulp.dest(paths.lib_destination + "angular-spinners"));
 });
 
 gulp.task('views', function(){
@@ -150,6 +149,7 @@ gulp.task('manifest', function(){
 	gulp.src('./app/manifest.json')
 		.pipe(gulp.dest('dist/'));
 });
+
 /**
 * Takes html templates and transform them to angular templates (javascript)
 */
@@ -177,19 +177,11 @@ gulp.task('templates', function() {
 		.pipe(gulp.dest('./app/js'));
 });
 
-/**
-* Concat, closure, annotate, uglify scripts
-* @beforeDo `gulp templates`
-*/
 gulp.task('scripts', ['templates'], function() {
 	return gulp.src(paths.javascripts)
-		//first, I'm building a clean 'main.js' file
 		.pipe(concat('main.js'))
 		.pipe(ngannotate())
 		.pipe(gulp.dest('./dist'))
-		//then, uglify the `main.js` and rename it to `main.min.js`
-		//mangling might cause issues with angular
-		// .pipe(uglify({mangle: false}))
 		.pipe(babel({presets: ['es2015']}))
 		.pipe(uglify({mangle: false}).on('error', function(e){
          	console.log(e);

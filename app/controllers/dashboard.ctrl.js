@@ -3,7 +3,7 @@
 
 angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
 	function(ENV, $timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
-
+		$scope.isLoading = true;
 		$scope.title = "Calendar List";
 
 		var newDate = Date.now() - (24*60*60*1000);  // current day minus 1 day
@@ -14,15 +14,23 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 		var waitlistRef = firebase.database().ref().child('waitlist');
 		var userRef = firebase.database().ref().child('users');
 
-		
-		$scope.showroster = true;
+		$scope.today = Date.now();
 		
 		$scope.go = function(date){
 			$state.go('root.dash.ballnight', { date: date});
 		};
-
+		
 		$scope.ballnights = $firebaseArray(ballnightsRef);
 
+		$scope.ballnights.$loaded().then(function() {
+			console.log('loaded');
+			$timeout(function() {
+				$scope.isLoading = false;
+			}, 500);
+		});
+
+		
+		
 		function formatMobile(mobile){
 			mobile = "+1" + mobile.replace(/-/g, "");
 			return mobile;

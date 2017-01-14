@@ -39,7 +39,6 @@ md-toast.my-error .md-toast-content {
   height: 100vh;
   /*justify-content: center;*/
 }
-
 .button-area {
 	margin: 0 auto;
 }
@@ -72,7 +71,7 @@ md-toast.my-error .md-toast-content {
 	color: grey; 
 }
 .splash {
-	/*display: none;*/
+	display: none;
 }
 
 [ng-cloak].splash {
@@ -85,7 +84,30 @@ md-toast.my-error .md-toast-content {
 	left: 0;
 	height:100%;
 	width:100%;	
-	filter: alpha(opacity=60);
-	opacity: 0.6;
+	filter: alpha(opacity=20);
+	opacity: 0.2;
 	background: #000;
+}
+.loading {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+/* Transparent Overlay */
+.loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
 }
