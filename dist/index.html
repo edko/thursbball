@@ -34,11 +34,15 @@
 </head>
 
 <body ng-controller="MenuController" layout="row" style="height: 100vh;">
-	<div class="splash">
-		<div>
+	<!-- div class="splash" flex>
+		<h2>Loading...</h2>
+		<div style="border: 1px solid red;color:#000;">
+			<h2>Loading...</h2>
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>	
-	</div>
+	</div> -->
+	<!-- <spinner name="booksSpinner" img-src="spinner.gif"></spinner> -->
+	
 	<div layout="column" flex>
 		<div ui-view="header"></div>
 		<div ui-view="sidenav"></div>
@@ -46,6 +50,7 @@
 			<ui-view></ui-view>
 		</md-content>
 	</div>
+
 
 	<script src="./lib/firebase/firebase.js"></script>
 	<script src="main.min.js"></script>

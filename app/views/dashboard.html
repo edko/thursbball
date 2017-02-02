@@ -25,7 +25,8 @@
 	<md-content layout-wrap style="height: 40vh">
 		<md-list-item ng-repeat="ballnight in ballnights" 
 				ng-click="go(ballnight.bball_date)" 
-				ng-style="ballnight.bball_date < today && {'background-color':'#4C4C4C'} || {'background-color': '#F2F2F2'}">
+				ng-style="ballnight.bball_date < today && {'background-color':'#5C5C5C'} || {'background-color': '#F2F2F2'}"z
+				>
 			<div class="md-list-item-text">
 				
 				<player-status data="ballnight"></player-status>

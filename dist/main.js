@@ -540,148 +540,14 @@ angular.module('mcwebb.twilio', [])
 	}];
 });
 
-/**
-* angularAddToHomescreen Module
-*
-* Description
-*/
-angular.module('angularAddToHomeScreen', [])
-  .constant('aathsLocales', {
-    'en': {
-      'iOS': 'Install this web app on your %device: tap %icon and then <strong>Add to Home Screen</strong>.'
-    }
-  });
-
-'use strict';
-
-angular.module('angularAddToHomeScreen')
-  .directive('ngAddToHomeScreen', ['$homeScreenDetector', 'aathsLocales', function($homeScreenDetector, aathsLocales){
-    var hydrateInstructions = function (hsdInstance) {
-      var device = hsdInstance.device() || 'device';
-      var instructions;
-      var icon;
-
-
-      if(hsdInstance.iOS9() || hsdInstance.iOS8() || hsdInstance.iOS7() || hsdInstance.iOS6()) {
-        instructions = aathsLocales.en.iOS;
-        if (hsdInstance.iOS9()) {
-          icon = 'iOS8';
-        } else if (hsdInstance.iOS8()) {
-          icon = 'iOS8';
-        } else if (hsdInstance.iOS7()) {
-          icon = 'iOS7';
-        } else {
-          icon = 'iOS6';
-        }
-      }
-
-      instructions = instructions
-        .replace('%icon', function () {
-          return '<span class="aaths-' + icon + '-icon"></span>';
-        })
-        .replace('%device', device);
-      return '<div class="aaths-instructions">' + instructions + '</div>';
-    };
-
-    // Runs during compile
-    return {
-      // name: '',
-      // priority: 1,
-      // terminal: true,
-      scope: {
-        closeCallback: '=closeCallback'
-      }, // {} = isolate, true = child, false/undefined = no change
-      // controller: function($scope, $element, $attrs, $transclude) {},
-      // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
-      // restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
-      template: '<a class="aaths-close" ng-click="aathsClose()">{{ closeText }}</a><div ng-transclude></div>',
-      // templateUrl: '',
-      // replace: true,
-      transclude: true,
-      // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
-      link: function($scope, iElm) {
-
-        $scope.aathsClose = function () {
-          iElm.remove();
-          if(angular.isFunction($scope.closeCallback)) {
-            $scope.closeCallback();
-          }
-        };
-        var hsd = new $homeScreenDetector();
-        $scope.applicable = hsd.safari && (hsd.iOS9() || hsd.iOS8() || hsd.iOS7() || hsd.iOS6()) && !hsd.fullscreen();
-        $scope.closeText = '×';
-        if($scope.applicable) {
-          iElm
-            .addClass('aaths-container')
-            .append(hydrateInstructions(hsd));
-        } else {
-          iElm.remove();
-        }
-      }
-    };
-  }]);
-
-'use strict';
-
-/**
- *
- */
-angular.module('angularAddToHomeScreen')
-  .factory('$homeScreenDetector', [function(){
-
-    var parser = new UAParser();
-
-    function getMajorVersion (version) {
-      return (typeof(version) === 'undefined') ? undefined : version.split('.')[0];
-    }
-
-    var Detector = function(options) {
-      angular.extend(this, options);
-      if(angular.isDefined(this.customUA)) {
-        parser.setUA(this.customUA);
-      }
-      this.result = parser.getResult();
-    };
-
-    Detector.prototype.safari = function () {
-      return this.result.browser.name === 'Mobile Safari';
-    };
-
-    Detector.prototype.iOS9 = function () {
-      return this.result.os.name === 'iOS' && getMajorVersion(this.result.os.version) === '9';
-    };
-    
-    Detector.prototype.iOS8 = function () {
-      return this.result.os.name === 'iOS' && getMajorVersion(this.result.os.version) === '8';
-    };
-
-    Detector.prototype.iOS7 = function () {
-      return this.result.os.name === 'iOS' && getMajorVersion(this.result.os.version) === '7';
-    };
-
-    Detector.prototype.iOS6 = function () {
-      return this.result.os.name === 'iOS' && getMajorVersion(this.result.os.version) === '6';
-    };
-
-    Detector.prototype.device = function () {
-      return this.result.device.model;
-    };
-
-    Detector.prototype.fullscreen = function () {
-      return (("standalone" in window.navigator) && window.navigator.standalone) ? true : false;
-    };
-
-    return Detector;
-
-  }]);
-
+"undefined"!=typeof module&&"undefined"!=typeof exports&&module.exports===exports&&(module.exports="angularSpinners"),function(e,n,r){n.module("angularSpinners",[]).factory("spinnerService",function(){var e={};return{_register:function(n){if(!n.hasOwnProperty("name"))throw new Error("Spinner must specify a name when registering with the spinner service.");e[n.name]=n},_unregister:function(n){e.hasOwnProperty(n)&&delete e[n]},_unregisterGroup:function(n){for(var r in e)e[r].group===n&&delete e[r]},_unregisterAll:function(){for(var n in e)delete e[n]},show:function(n){var r=e[n];if(!r)throw new Error("No spinner named '"+n+"' is registered.");r.show()},hide:function(n){var r=e[n];if(!r)throw new Error("No spinner named '"+n+"' is registered.");r.hide()},showGroup:function(n){var r=!1;for(var o in e){var i=e[o];i.group===n&&(i.show(),r=!0)}if(!r)throw new Error("No spinners found with group '"+n+"'.")},hideGroup:function(n){var r=!1;for(var o in e){var i=e[o];i.group===n&&(i.hide(),r=!0)}if(!r)throw new Error("No spinners found with group '"+n+"'.")},showAll:function(){for(var n in e)e[n].show()},hideAll:function(){for(var n in e)e[n].hide()}}}),n.module("angularSpinners").directive("spinner",function(){return{restrict:"EA",replace:!0,transclude:!0,scope:{name:"@?",group:"@?",show:"=?",imgSrc:"@?",register:"@?",onLoaded:"&?",onShow:"&?",onHide:"&?"},template:['<div ng-show="show">','  <img ng-if="imgSrc" ng-src="{{imgSrc}}" />',"  <ng-transclude></ng-transclude>","</div>"].join(""),controller:["$scope","spinnerService",function(e,n){e.register=e.hasOwnProperty("register")&&"false"===e.register.toLowerCase()?!1:!0;var r={name:e.name,group:e.group,show:function(){e.show=!0},hide:function(){e.show=!1},toggle:function(){e.show=!e.show}};e.register===!0&&n._register(r),(e.onShow||e.onHide)&&e.$watch("show",function(o){o&&e.onShow?e.onShow({spinnerService:n,spinnerApi:r}):!o&&e.onHide&&e.onHide({spinnerService:n,spinnerApi:r})}),e.onLoaded&&e.onLoaded({spinnerService:n,spinnerApi:r})}]}})}(window,window.angular);
 angular.module("bballapp.config", [])
 .constant("ENV", {"firebase":{"apiKey":"AIzaSyAMCzHhniQmZjSp0E2xI2Gp9MxXy0ANZXk","authDomain":"thursbball.firebaseapp.com","databaseURL":"https://thursbball.firebaseio.com","storageBucket":"thursbball.appspot.com","messagingSenderId":"379104990436"},"twilio":{"accountSid":"ACafbb499229ea9c97adb62818ad96f125","authToken":"49446639ec20a2a35fe0b85dd81baec6","phone":"+16264276815"}});
 
 (function () {
 'use strict';
 
-var app = angular.module('bballapp',['bballapp.config','firebase', 'ui.router', 'ngMaterial', 'directive.players', 'mcwebb.twilio', 'angularAddToHomeScreen']);
+var app = angular.module('bballapp',['angularSpinners','bballapp.config','firebase', 'ui.router', 'ngMaterial', 'directive.players', 'mcwebb.twilio']);
 
 app.config(['ENV', function(ENV) {
 	firebase.initializeApp({
@@ -728,7 +594,7 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 
 .config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider, $stateProvider){
 	
-	$urlRouterProvider.otherwise('/dashboard');
+	$urlRouterProvider.otherwise('/login');
 
 	$stateProvider
 		.state('root', {
@@ -779,12 +645,12 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 					controller: 'DashboardController'
 				}
 			},
-			authenticate: true
-			// resolve: {
-			// 	currentAuth: function(Authentication) {
-			// 		return Authentication.requireAuth();
-			// 	} //current Auth
-			// } //resolve
+			// authenticate: true
+			resolve: {
+				currentAuth: ["Authentication", function(Authentication) {
+					return Authentication.requireAuth();
+				}] //current Auth
+			} //resolve
 		})
 
 		.state('root.dash.ballnight', {
@@ -837,12 +703,12 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 					controller: 'BallnightsController'
 				}
 			},
-			authenticate: true
-			// resolve: {
-			// 	currentAuth: function(Authentication) {
-			// 		return Authentication.requireAuth();
-			// 	} //current Auth
-			// } //resolve
+			// authenticate: true
+			resolve: {
+				currentAuth: ["Authentication", function(Authentication) {
+					return Authentication.requireAuth();
+				}] //current Auth
+			} //resolve
 		})
 		
 		.state('root.myprofile', {
@@ -941,7 +807,7 @@ angular.module('bballapp').controller('bballController', ['$scope', function($sc
 
 angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
 	function(ENV, $timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
-
+		$scope.isLoading = true;
 		$scope.title = "Calendar List";
 
 		var newDate = Date.now() - (24*60*60*1000);  // current day minus 1 day
@@ -952,15 +818,23 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 		var waitlistRef = firebase.database().ref().child('waitlist');
 		var userRef = firebase.database().ref().child('users');
 
-		
-		$scope.showroster = true;
+		$scope.today = Date.now() - 1*24*60*60*1000
 		
 		$scope.go = function(date){
 			$state.go('root.dash.ballnight', { date: date});
 		};
-
+		
 		$scope.ballnights = $firebaseArray(ballnightsRef);
 
+		$scope.ballnights.$loaded().then(function() {
+			console.log('loaded');
+			$timeout(function() {
+				$scope.isLoading = false;
+			}, 500);
+		});
+
+		
+		
 		function formatMobile(mobile){
 			mobile = "+1" + mobile.replace(/-/g, "");
 			return mobile;
@@ -1342,6 +1216,16 @@ angular.module('bballapp').controller('MyProfileController', [ '$scope', '$rootS
 				);
 			});
 		};
+
+		$scope.sendEmailVerification = function(){
+			var user = $scope.currentUser;
+			user.sendEmailVerification().then(function(){
+				console.log('email sent');
+			}).catch(function(){
+				console.log('something happened');
+			});
+		};
+
 }]);
 
 })();
@@ -1540,13 +1424,14 @@ angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAu
 			}
 		});
 
-		var showToast = function(message){
+		var showToast = function(message, classname){
 			$mdToast.show(
 				$mdToast.simple()
 				.textContent(message)
 				.position('bottom center')
 				.hideDelay(2000)
-				.toastClass('my-error')
+				// .toastClass('my-error')
+				.toastClass(classname)
 			);
 		};
 
@@ -1557,7 +1442,7 @@ angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAu
 						$state.go('root.dash');
 					}).catch(function(error){
 						//$rootScope.message = error.message;
-						showToast(error.message);
+						showToast(error.message, 'error');
 					});
 			},
 			logout: function(){
@@ -1581,7 +1466,7 @@ angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAu
 						myObject.login(user);
 					}).catch(function(error){
 						// $rootScope.message = error.message;
-						showToast(error.message);
+						showToast(error.message, 'error');
 					});
 			},
 			resetPassword: function(user){
@@ -1591,7 +1476,7 @@ angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAu
 			  			$state.go('login');
 					}).catch(function(error) {
 			  			// console.error("Error: ", error);
-			  			showToast(error.message);
+			  			showToast(error.message, 'error');
 					});
 
 			}

@@ -1,8 +1,8 @@
 (function () {
 "use strict";
 
-angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio',
-	function(ENV, $timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio){
+angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio', '$http',
+	function(ENV, $timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio, $http){
 		$scope.isLoading = true;
 		$scope.title = "Calendar List";
 
@@ -14,7 +14,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 		var waitlistRef = firebase.database().ref().child('waitlist');
 		var userRef = firebase.database().ref().child('users');
 
-		$scope.today = Date.now();
+		$scope.today = Date.now() - 1*24*60*60*1000;
 		
 		$scope.go = function(date){
 			$state.go('root.dash.ballnight', { date: date});
@@ -29,8 +29,31 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 			}, 500);
 		});
 
+		var sendEmail = function(player, date, type){
+			var url = "https://enigmatic-headland-12201.herokuapp.com/api/send";
+			var balldate = $filter('date')(date, "M/dd/yyyy");
+			var json = {
+					email: player.email,
+					firstname: player.first_name,
+					date: balldate,
+					type: type
+				};
+
+			if(player.emailnotification === true){
+				// console.log(json);
+				$http.post(url, json)
+					.then(function(){
+						console.log('json sent');
+					})
+					.catch(function(error){
+						console.log(error.message);
+					});
+			} else {
+				console.log('user does not want email notifications');
+			}			
+		};
 		
-		
+
 		function formatMobile(mobile){
 			mobile = "+1" + mobile.replace(/-/g, "");
 			return mobile;
@@ -60,7 +83,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 			isBallerInRoster(date).then(function(){
 				showToast("You are on the roster already.");
 			}).catch(function(){
-				addBaller(date);
+				addBaller($rootScope.currentUser, date);
 			});
 		};
 
@@ -76,6 +99,8 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 			});	
 		};
 
+
+
 		var checkoutDialog = function(date, event) {
 
 			var removeDate = $filter('date')(date, "M/dd/yyyy");
@@ -88,7 +113,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 				.cancel('No');
 			$mdDialog.show(confirm).then(function() {
 				// console.log('remove player');
-				removeBaller(date);
+				removeBaller($rootScope.currentUser, date);
 			}, function() {
 				$scope.status = 'You decided to keep your record.';
 				console.log('did not remove player');
@@ -127,7 +152,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 				);
 		};
 
-		var addBaller =  function(date) {
+		var addBaller =  function(player, date) {
 			// function should add baller to either roster or waitlist and to user myroster and mywaitlist
 			// ref.child('roster').child(date).child($rootScope.currentUser.$id).set({
 			// 	first_name: $rootScope.currentUser.first_name,
@@ -137,9 +162,9 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 			// });
 
 			var userData = {
-				first_name: $rootScope.currentUser.first_name,
-				last_name: $rootScope.currentUser.last_name,
-				email: $rootScope.currentUser.email,
+				first_name: player.first_name,
+				last_name: player.last_name,
+				email: player.email,
 				date: firebase.database.ServerValue.TIMESTAMP
 			};
 			
@@ -155,7 +180,8 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 			}).then(function(){
 				showToast('You have been added for this night!');
 			}).then(function(){
-				sendText($rootScope.currentUser, date);
+				sendEmail(player, date, 'add');
+				sendText(player, date);
 			});
 		};
 
@@ -166,10 +192,10 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 			});
 		};
 
-		var removeBaller =  function(date) {
+		var removeBaller =  function(player, date) {
 			// console.log(date);
-			var refDel = rosterRef.child(date).child($rootScope.currentUser.$id);
-			var userDelRef = userRef.child($rootScope.currentUser.$id).child('mybballnights').child(date);
+			var refDel = rosterRef.child(date).child(player.$id);
+			var userDelRef = userRef.child(player.$id).child('mybballnights').child(date);
 			$firebaseObject(refDel).$remove().then(function(){
 				$firebaseObject(userDelRef).$remove();
 
@@ -183,6 +209,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 				addWaitlistToRoster(date);
 			}).then(function(){
 				showToast('You have been removed for this night!');
+				sendEmail(player, date, 'remove');
 			}).catch(function(error){
 				console.log(error);
 			});
@@ -291,7 +318,12 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 						waitlistPlayerRef.update({
 							date: firebase.database.ServerValue.TIMESTAMP
 						}).then(function(){
-							//sendText(waitlistPlayer, date);
+							// depending on user's pref
+							// send text to waitlist player
+							// should send email to waitlist player
+							sendEmail(waitlistPlayer, date, 'add');
+							sendText(waitlistPlayer, date);
+
 						}).then(function(){
 							ballnightsRef.child(date).child('counter').transaction(function(counter) {
 								if(counter === 0 || counter < 16) {

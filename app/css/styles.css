@@ -1,3 +1,6 @@
+.login-logo {
+  margin-bottom: 50px;
+}
 .md-button {
 	/*width: 100%;*/
 	margin: 5px 0;
@@ -23,7 +26,7 @@ md-toast.md-center {
   left: 50%;
   transform: translate3d(-50%, 0, 0);
 }
-md-toast.my-error .md-toast-content {
+md-toast.error .md-toast-content {
     background-color: #990000;
 }
 .bb-mdi-fix{

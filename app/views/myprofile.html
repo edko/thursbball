@@ -52,16 +52,29 @@
 								<div layout="row">
 									<md-input-container flex="100">
 										<label>Email</label>
-										<input ng-model="currentUser.email" type="email" ng-disabled="true">
+										<input ng-model="currentUser.email" type="email" ng-disabled="false">
+									</md-input-container>
+									<md-input-container>
+										<!-- <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="currentUser.emailnotifications" class="md-primary">
+						            		<span style="font-size: 13px;color: rgba(0,0,0,0.54)">Email notifications.</span>
+						          		</md-checkbox> -->
 									</md-input-container>
 								</div>
 								<div layout="column">
 									<md-input-container>
-										<md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="currentUser.SMS" class="md-primary">
-						            		<span style="font-size: 13px;color: rgba(0,0,0,0.54)">Agree to receive text notifications.</span>
-						          		</md-checkbox>
+										<md-switch ng-model="currentUser.emailnotification" aria-label="Email notification" ng-true-value=true ng-false-value=false class="md-primary">
+    										Receive email notifications
+  										</md-switch>
 									</md-input-container>
-									<md-input-container ng-hide="!currentUser.SMS" flex>
+									<md-input-container>
+										<!-- <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="currentUser.SMS" class="md-primary">
+						            		<span style="font-size: 13px;color: rgba(0,0,0,0.54)">SMS/Text notifications.</span>
+						          		</md-checkbox> -->
+						          		<md-switch ng-model="currentUser.SMS" aria-label="SMS/Text notifications" ng-true-value=true class="md-primary">
+    										Receive SMS/Text notifications
+  										</md-switch>
+									</md-input-container>
+									<md-input-container ng-if="currentUser.SMS" flex>
 										<label>Mobile</label>
 										<input name="mobile" ng-model="currentUser.mobile" 
 											ng-required="currentUser.SMS"			

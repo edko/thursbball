@@ -48,7 +48,7 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 
 .config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider, $stateProvider){
 	
-	$urlRouterProvider.otherwise('/dashboard');
+	$urlRouterProvider.otherwise('/login');
 
 	$stateProvider
 		.state('root', {
@@ -73,22 +73,19 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 		.state('login', {
 			url: '/login',
 			templateUrl: 'views/login.html',
-			controller: 'RegistrationController',
-			authenticate: false
+			controller: 'RegistrationController'
 		})
 		
 		.state('register', {
 			url: '/register',
 			templateUrl: 'views/register.html',
-			controller: 'RegistrationController',
-			authenticate: false
+			controller: 'RegistrationController'
 		})
 		
 		.state('resetpassword', {
 			url: '/resetpassword',
 			templateUrl: 'views/resetpassword.html',
-			controller: 'RegistrationController',
-			authenticate: false
+			controller: 'RegistrationController'
 		})
 
 		.state('root.dash', {
@@ -99,12 +96,12 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 					controller: 'DashboardController'
 				}
 			},
-			authenticate: true
-			// resolve: {
-			// 	currentAuth: function(Authentication) {
-			// 		return Authentication.requireAuth();
-			// 	} //current Auth
-			// } //resolve
+			// authenticate: true
+			resolve: {
+				currentAuth: function(Authentication) {
+					return Authentication.requireAuth();
+				} //current Auth
+			} //resolve
 		})
 
 		.state('root.dash.ballnight', {
@@ -115,7 +112,11 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 					controller: 'BallnightDetailController'
 				}
 			},
-			authenticate: true
+			resolve: {
+				currentAuth: function(Authentication) {
+					return Authentication.requireAuth();
+				} //current Auth
+			} //resolve
 		})
 		
 		.state('root.about', {
@@ -125,7 +126,25 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 					templateUrl: 'views/about.html'
 				}	
 			},
-			authenticate: true
+			resolve: {
+				currentAuth: function(Authentication) {
+					return Authentication.requireAuth();
+				} //current Auth
+			} //resolve
+		})
+
+		.state('root.values', {
+			url: '/values',
+			views: {
+				'@':{
+					templateUrl: 'views/values.html'
+				}	
+			},
+			resolve: {
+				currentAuth: function(Authentication) {
+					return Authentication.requireAuth();
+				} //current Auth
+			} //resolve
 		})
 		
 		.state('root.contact', {
@@ -135,7 +154,11 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 					templateUrl: 'views/contact.html'
 				}	
 			},
-			authenticate: true
+			resolve: {
+				currentAuth: function(Authentication) {
+					return Authentication.requireAuth();
+				} //current Auth
+			} //resolve
 
 		})
 
@@ -146,7 +169,11 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 					templateUrl: 'views/faq.html'
 				}	
 			},
-			authenticate: true
+			resolve: {
+				currentAuth: function(Authentication) {
+					return Authentication.requireAuth();
+				} //current Auth
+			} //resolve
 		})
 
 		.state('root.ballnights', {
@@ -157,12 +184,12 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 					controller: 'BallnightsController'
 				}
 			},
-			authenticate: true
-			// resolve: {
-			// 	currentAuth: function(Authentication) {
-			// 		return Authentication.requireAuth();
-			// 	} //current Auth
-			// } //resolve
+			// authenticate: true
+			resolve: {
+				currentAuth: function(Authentication) {
+					return Authentication.requireAuth();
+				} //current Auth
+			} //resolve
 		})
 		
 		.state('root.myprofile', {
