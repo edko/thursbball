@@ -181,7 +181,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 				showToast('You have been added for this night!');
 			}).then(function(){
 				sendEmail(player, date, 'add');
-				sendText(player, date);
+				// sendText(player, date);
 			});
 		};
 
