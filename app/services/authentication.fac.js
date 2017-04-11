@@ -60,18 +60,17 @@ angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAu
 			}, //require Authentication
 			register: function(user){
 				auth.$createUserWithEmailAndPassword(user.email, user.password)
-				.then(function(regUser){
-					addUser(regUser, user);
-					var user = firebase.auth().currentUser;
-					user.sendEmailVerification().then(function() {
-						showToast('Check your inbox to verify your email address', 'default');
-						$state.go('login');
+					.then(function(regUser){
+						addUser(regUser, user);
+						var tbuser = firebase.auth().currentUser;
+						tbuser.sendEmailVerification().then(function() {
+							showToast('Check your inbox to verify your email address', 'default');
+							$state.go('login');
+						});
+					}).catch(function(error){
+						// $rootScope.message = error.message;
+						showToast(error.message, 'error');
 					});
-				})
-				.catch(function(error){
-					// $rootScope.message = error.message;
-					showToast(error.message, 'error');
-				});
 			},
 			resetPassword: function(user){
 				auth.$sendPasswordResetEmail(user.email)

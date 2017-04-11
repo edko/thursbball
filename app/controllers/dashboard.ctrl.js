@@ -4,7 +4,7 @@
 angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio', '$http',
 	function(ENV, $timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio, $http){
 		$scope.isLoading = true;
-		$scope.title = "Calendar List";
+		$scope.title = "Dates";
 
 		var newDate = Date.now() - (24*60*60*1000);  // current day minus 1 day
 		

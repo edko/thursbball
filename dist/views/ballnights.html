@@ -21,8 +21,10 @@
 			<p>
 				{{ ballnight.bball_date | date: 'M/dd/yyyy' }} 
 				{{ ballnight.counter }}/{{ ballnight.waitlistcounter }}
+				{{ ballnight.visible }}
 			</p>
-			<md-button class="md-secondary" ng-click="deleteBballNight(key)" ng-disabled="true">Delete</md-button>
+			<md-button class="md-primary" ng-click="undeleteBballNight(ballnight.bball_date)" ng-disabled="ballnight.visible==!false">Show</md-button>
+			<md-button class="md-primary" ng-click="deleteBballNight(ballnight.bball_date)" ng-disabled="ballnight.visible==false">Hide</md-button>
 		</md-list-item>
 	</div>
 </div>

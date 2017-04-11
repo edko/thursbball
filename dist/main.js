@@ -815,8 +815,19 @@ angular.module('bballapp').controller('BallnightsController', [ '$scope', '$fire
 			});
 		};
 
-		$scope.deleteBballNight = function(key){
-			$scope.ballnights.$remove(key);
+		$scope.deleteBballNight = function(date){
+			// $scope.ballnights.$remove(key);
+			console.log(date);
+			ballnightsRef.child(date).update({
+				visible: false
+			});
+		};
+		$scope.undeleteBballNight = function(date){
+			// $scope.ballnights.$remove(key);
+			console.log(date);
+			ballnightsRef.child(date).update({
+				visible: true
+			});
 		};
 }]);
 
@@ -835,7 +846,7 @@ angular.module('bballapp').controller('bballController', ['$scope', function($sc
 angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','$rootScope','$filter' ,'$scope','Authentication', '$firebaseArray', '$firebaseObject', '$state', '$mdToast', '$mdDialog', 'Twilio', '$http',
 	function(ENV, $timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio, $http){
 		$scope.isLoading = true;
-		$scope.title = "Calendar List";
+		$scope.title = "Dates";
 
 		var newDate = Date.now() - (24*60*60*1000);  // current day minus 1 day
 		
@@ -1543,18 +1554,17 @@ angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAu
 			}, //require Authentication
 			register: function(user){
 				auth.$createUserWithEmailAndPassword(user.email, user.password)
-				.then(function(regUser){
-					addUser(regUser, user);
-					var user = firebase.auth().currentUser;
-					user.sendEmailVerification().then(function() {
-						showToast('Check your inbox to verify your email address', 'default');
-						$state.go('login');
+					.then(function(regUser){
+						addUser(regUser, user);
+						var tbuser = firebase.auth().currentUser;
+						tbuser.sendEmailVerification().then(function() {
+							showToast('Check your inbox to verify your email address', 'default');
+							$state.go('login');
+						});
+					}).catch(function(error){
+						// $rootScope.message = error.message;
+						showToast(error.message, 'error');
 					});
-				})
-				.catch(function(error){
-					// $rootScope.message = error.message;
-					showToast(error.message, 'error');
-				});
 			},
 			resetPassword: function(user){
 				auth.$sendPasswordResetEmail(user.email)

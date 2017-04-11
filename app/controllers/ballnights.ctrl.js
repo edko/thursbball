@@ -18,8 +18,19 @@ angular.module('bballapp').controller('BallnightsController', [ '$scope', '$fire
 			});
 		};
 
-		$scope.deleteBballNight = function(key){
-			$scope.ballnights.$remove(key);
+		$scope.deleteBballNight = function(date){
+			// $scope.ballnights.$remove(key);
+			console.log(date);
+			ballnightsRef.child(date).update({
+				visible: false
+			});
+		};
+		$scope.undeleteBballNight = function(date){
+			// $scope.ballnights.$remove(key);
+			console.log(date);
+			ballnightsRef.child(date).update({
+				visible: true
+			});
 		};
 }]);
 
