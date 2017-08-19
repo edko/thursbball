@@ -5,15 +5,20 @@
 	<ol>
 		<li ng-repeat="player in players" style="font-size:14px;">
 			<i class="mdi mdi-check-circle-outline mdi-18px mdi-dark" style="color:green;"></i>
+			{{ player.paid}}
 			<span ng-if="player.email==currentUser.email" style="font-weight: bold; color: green;">
-				{{ player.first_name}} {{ player.last_name}} - {{ player.date | date:'MM/dd/yyyy @ h:mma' }} 
+				{{ player.first_name}} {{ player.last_name}} - {{ player.date | date:'MM/dd/yyyy @ h:mma' }}
+
 				<!-- <button ng-click="removeMe(player.date)">
 					<i class="mdi mdi-close-circle" style="color:red;"></i> Remove
 				</button> -->
 			</span>
 			<span ng-if="player.email!=currentUser.email">
-				{{ player.first_name}} {{ player.last_name}} - {{ player.date | date:'MM/dd/yyyy @ h:mma' }} 
-			</span>	
+				{{ player.first_name}} {{ player.last_name}} - {{ player.date | date:'MM/dd/yyyy @ h:mma' }}
+			</span>
+			<span ng-if="currentUser.role==='admin'">
+				<button ng-click="togglePaid(player.$id, player.paid)">Paid</button>
+			</span>
 		</li>
 		<li ng-repeat="wait in waitlist" style="font-size:14px;">
 			<i class="mdi mdi-alert-circle-outline mdi-18px mdi-dark" style="color:red;"></i>
@@ -25,8 +30,8 @@
 			</span>
 			<span ng-if="wait.email!=currentUser.email">
 				{{ wait.first_name}} {{ wait.last_name}} - {{ wait.date | date:'MM/dd/yyyy @ h:mma' }}
-			</span>	
-			
+			</span>
+
 		</li>
 	</ol>
 </section>

@@ -7,7 +7,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 		$scope.title = "Dates";
 
 		var newDate = Date.now() - (24*60*60*1000);  // current day minus 1 day
-		
+
 		var ref = firebase.database().ref();
 		var ballnightsRef = firebase.database().ref().child('bballnights');//.orderByChild('bball_date')//.startAt(newDate)
 		var rosterRef = firebase.database().ref().child('roster');
@@ -15,11 +15,11 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 		var userRef = firebase.database().ref().child('users');
 
 		$scope.today = Date.now() - 1*24*60*60*1000;
-		
+
 		$scope.go = function(date){
 			$state.go('root.dash.ballnight', { date: date});
 		};
-		
+
 		$scope.ballnights = $firebaseArray(ballnightsRef);
 
 		$scope.ballnights.$loaded().then(function() {
@@ -50,9 +50,9 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 					});
 			} else {
 				console.log('user does not want email notifications');
-			}			
+			}
 		};
-		
+
 
 		function formatMobile(mobile){
 			mobile = "+1" + mobile.replace(/-/g, "");
@@ -75,7 +75,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 	        	.error(function (data, status, headers, config) {
 	            	// Failure - do something
 	        	});
-			} 
+			}
 		};
 
 		$scope.checkin = function(ballnight){
@@ -96,7 +96,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 			});
 			$timeout(function(){
 				$scope.$apply();
-			});	
+			});
 		};
 
 
@@ -165,9 +165,10 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 				first_name: player.first_name,
 				last_name: player.last_name,
 				email: player.email,
-				date: firebase.database.ServerValue.TIMESTAMP
+				date: firebase.database.ServerValue.TIMESTAMP,
+				paid: false
 			};
-			
+
 			ballnightsRef.child(date).child('counter').transaction(function(counter) {
 				if(counter === 0 || counter < 16) {
 					counter = counter + 1;
@@ -222,7 +223,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 				email: $rootScope.currentUser.email,
 				date: firebase.database.ServerValue.TIMESTAMP
 			};
-			
+
 			return new Promise(function(resolve,reject) {
 				waitlistRef.child(date).child($rootScope.currentUser.$id).set(userData).then(function(){
 					userRef.child($rootScope.currentUser.$id).child('mywaitlists').child(date).set({
@@ -329,7 +330,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 								if(counter === 0 || counter < 16) {
 									counter = counter + 1;
 								}
-								return counter;	
+								return counter;
 							});
 						}).then(function(){
 							addToMyBballNights(date,key);
@@ -339,7 +340,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 							console.log(error);
 						});
 					} else if(typeof(console) !== 'undefined' && console.error){
-						console.error(error); 
+						console.error(error);
 					}
 				});
 			});

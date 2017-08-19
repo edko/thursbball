@@ -36,7 +36,7 @@ angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAu
 				last_name: user.lastname,
 				email: user.email,
 				date: firebase.database.ServerValue.TIMESTAMP
-			});			
+			});
 		};
 
 		var myObject =  {
@@ -59,7 +59,8 @@ angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAu
 				return auth.$requireSignIn();
 			}, //require Authentication
 			register: function(user){
-				auth.$createUserWithEmailAndPassword(user.email, user.password)
+				if(user.code === 'TEST123') {
+					auth.$createUserWithEmailAndPassword(user.email, user.password)
 					.then(function(regUser){
 						addUser(regUser, user);
 						var tbuser = firebase.auth().currentUser;
@@ -71,6 +72,10 @@ angular.module('bballapp').factory('Authentication', ['$rootScope', '$firebaseAu
 						// $rootScope.message = error.message;
 						showToast(error.message, 'error');
 					});
+				} else {
+					showToast('Code is invalid', 'error');
+				}
+
 			},
 			resetPassword: function(user){
 				auth.$sendPasswordResetEmail(user.email)
