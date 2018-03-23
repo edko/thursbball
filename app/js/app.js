@@ -47,7 +47,7 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 }])
 
 .config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider, $stateProvider){
-	
+
 	$urlRouterProvider.otherwise('/login');
 
 	$stateProvider
@@ -75,13 +75,13 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 			templateUrl: 'views/login.html',
 			controller: 'RegistrationController'
 		})
-		
+
 		.state('register', {
 			url: '/register',
 			templateUrl: 'views/register.html',
 			controller: 'RegistrationController'
 		})
-		
+
 		.state('resetpassword', {
 			url: '/resetpassword',
 			templateUrl: 'views/resetpassword.html',
@@ -118,13 +118,13 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 				} //current Auth
 			} //resolve
 		})
-		
+
 		.state('root.about', {
 			url: '/about',
 			views: {
 				'@':{
 					templateUrl: 'views/about.html'
-				}	
+				}
 			},
 			resolve: {
 				currentAuth: function(Authentication) {
@@ -138,7 +138,7 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 			views: {
 				'@':{
 					templateUrl: 'views/values.html'
-				}	
+				}
 			},
 			resolve: {
 				currentAuth: function(Authentication) {
@@ -146,13 +146,13 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 				} //current Auth
 			} //resolve
 		})
-		
+
 		.state('root.contact', {
 			url: '/contact',
 			views: {
 				'@':{
 					templateUrl: 'views/contact.html'
-				}	
+				}
 			},
 			resolve: {
 				currentAuth: function(Authentication) {
@@ -167,7 +167,7 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 			views: {
 				'@':{
 					templateUrl: 'views/faq.html'
-				}	
+				}
 			},
 			resolve: {
 				currentAuth: function(Authentication) {
@@ -191,14 +191,30 @@ app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToas
 				} //current Auth
 			} //resolve
 		})
-		
+
+		.state('root.users', {
+			url: '/users',
+			views: {
+				'@':{
+					templateUrl: 'views/users.html',
+					controller: 'UsersController'
+				}
+			},
+			// authenticate: true
+			resolve: {
+				currentAuth: function(Authentication) {
+					return Authentication.requireAuth();
+				} //current Auth
+			} //resolve
+		})
+
 		.state('root.myprofile', {
 			url: '/myprofile',
 			views: {
 				'@':{
 					templateUrl: 'views/myprofile.html',
 					controller: 'MyProfileController'
-				}	
+				}
 			},
 			resolve: {
 				currentAuth: function(Authentication) {
