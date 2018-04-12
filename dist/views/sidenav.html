@@ -25,6 +25,19 @@
 			FAQ
 		</md-button>
 	</md-menu-item>
+	<span ng-if="user.role=='admin'">
+		<md-divider></md-divider>
+		<md-menu-item>
+			<md-button ng-href="#/users" ng-click="closeSidebar()">
+				Users
+			</md-button>
+		</md-menu-item>
+		<md-menu-item>
+			<md-button ng-href="#/ballnights" ng-click="closeSidebar()">
+				Ballnights
+			</md-button>
+		</md-menu-item>
+	</span>
 	<md-divider></md-divider>
 	<md-menu-item ng-if="!currentUser">
 		<md-button ng-href="#/login" ng-click="closeSidebar()">

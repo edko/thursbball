@@ -24,33 +24,37 @@
 					<label>Email</label>
 					<input ng-model="user.email" type="email" ng-required="true">
 				</md-input-container>
-				
+
 				<md-input-container class="md-block">
 					<label>Password</label>
 					<input ng-model="user.password" type="password" ng-required="true">
 				</md-input-container>
-				
+
+				<md-input-container	class="md-block">
+					<label>Registration Code</label>
+					<input ng-model="user.code" type="text" ng-required="true">
+				</md-input-container>
 				<md-input-container>
 					<md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="currentUser.SMS" class="md-primary">
-	            		<span style="font-size: 13px;color: rgba(0,0,0,0.54)">Agree to receive text notifications.</span>
+	            		<span style="font-size: 13px;color: rgba(0,0,0,0.54)">Check here to receive text notifications.</span>
 	          		</md-checkbox>
 				</md-input-container>
 				<md-input-container ng-hide="!currentUser.SMS" flex>
 					<label>Mobile</label>
-					<input name="mobile" ng-model="currentUser.mobile" 
-						ng-required="currentUser.SMS"			
-						minlength="12" 
-	         			maxlength="12" 
+					<input name="mobile" ng-model="currentUser.mobile"
+						ng-required="currentUser.SMS"
+						minlength="12"
+	         			maxlength="12"
 						ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" />
 					<div class="hint">###-###-####</div>
 				</md-input-container>
 				<div layout="row">
 					<md-button class="md-raised md-primary" type="submit" ng-disabled="registerForm.$invalid" flex="100">Sign up</md-button>
-					<md-button ng-href="#/login">Login</md-button>		
-				</div>	
-			</form>	
+					<md-button ng-href="#/login">Login</md-button>
+				</div>
+			</form>
 		</div>
-	
+
 	</div>
 </div>
 

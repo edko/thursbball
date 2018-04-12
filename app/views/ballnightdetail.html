@@ -4,20 +4,27 @@
 	</md-subheader>
 	<ol>
 		<li ng-repeat="player in players" style="font-size:14px;">
-			<i class="mdi mdi-check-circle-outline mdi-18px mdi-dark" style="color:green;"></i>
-			{{ player.paid}}
-			<span ng-if="player.email==currentUser.email" style="font-weight: bold; color: green;">
-				{{ player.first_name}} {{ player.last_name}} - {{ player.date | date:'MM/dd/yyyy @ h:mma' }}
 
-				<!-- <button ng-click="removeMe(player.date)">
-					<i class="mdi mdi-close-circle" style="color:red;"></i> Remove
-				</button> -->
+			<i class="mdi mdi-check-circle-outline mdi-18px mdi-dark" style="color:green;"></i>
+
+			<span ng-if="player.paid==true" style="font-weight:bold;color:green;">
+				<span ng-if="player.email==currentUser.email || currentUser.role=='admin'" style="font-weight: bold; color: green;">
+					{{ player.first_name}} {{ player.last_name}} - {{ player.date | date:'MM/dd/yyyy @ h:mma' }} ~ PAID
+				</span>
 			</span>
-			<span ng-if="player.email!=currentUser.email">
+
+			<span ng-if="player.paid!==true" style="font-weight:bold;color:red;">
+				<span ng-if="player.email==currentUser.email || currentUser.role=='admin'" style="font-weight: bold; color: red;">
+					{{ player.first_name}} {{ player.last_name}} - {{ player.date | date:'MM/dd/yyyy @ h:mma' }}
+				</span>
+			</span>
+
+			<span ng-if="player.email!=currentUser.email && currentUser.role!=='admin'">
 				{{ player.first_name}} {{ player.last_name}} - {{ player.date | date:'MM/dd/yyyy @ h:mma' }}
 			</span>
+
 			<span ng-if="currentUser.role==='admin'">
-				<button ng-click="togglePaid(player.$id, player.paid)">Paid</button>
+				<button ng-click="togglePaid(player.$id, player.paid)">Toggle Paid</button>
 			</span>
 		</li>
 		<li ng-repeat="wait in waitlist" style="font-size:14px;">

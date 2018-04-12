@@ -5,6 +5,7 @@ angular.module('bballapp').controller('DashboardController', ['ENV','$timeout','
 	function(ENV, $timeout, $rootScope,$filter, $scope, Authentication, $firebaseArray, $firebaseObject, $state, $mdToast, $mdDialog, Twilio, $http){
 		$scope.isLoading = true;
 		$scope.title = "Dates";
+		$scope.currentUser = $rootScope.currentUser
 
 		var newDate = Date.now() - (24*60*60*1000);  // current day minus 1 day
 

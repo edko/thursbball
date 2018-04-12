@@ -1,8 +1,10 @@
 (function(){
 'use strict';
 
-angular.module('bballapp').controller('MenuController', ['$scope', '$mdSidenav', '$timeout', 'Authentication',
-	function($scope, $mdSidenav, $timeout, Authentication){
+angular.module('bballapp').controller('MenuController', ['$scope', '$rootScope', '$mdSidenav', '$timeout', 'Authentication',
+	function($scope, $rootScope, $mdSidenav, $timeout, Authentication){
+
+		$scope.user = $rootScope.currentUser
 
 		$scope.openSidebar = function(){
 			$mdSidenav('right').toggle();

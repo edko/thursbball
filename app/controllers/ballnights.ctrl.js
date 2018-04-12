@@ -1,13 +1,19 @@
 (function(){
 'use strict';
 
-angular.module('bballapp').controller('BallnightsController', [ '$scope', '$firebaseArray', '$firebaseObject', 
-	function($scope, $firebaseArray, $firebaseObject){
+angular.module('bballapp').controller('BallnightsController', [ '$scope', '$rootScope', '$state', '$firebaseArray', '$firebaseObject',
+	function($scope, $rootScope, $state, $firebaseArray, $firebaseObject){
 		var ballnightsRef = firebase.database().ref().child('bballnights');
-		
+		var user = $rootScope.currentUser
+
+		if(user.role !== 'admin'){
+			$state.go('root.dash');
+			return;
+		}
+
 		$scope.ballnights = $firebaseArray(ballnightsRef);
 
-		$scope.addBballNight = function(){ 
+		$scope.addBballNight = function(){
 			console.log('add ballnight');
 			var balldate = $scope.bballdate.getTime();
 			ballnightsRef.child(balldate).set({

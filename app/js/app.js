@@ -13,6 +13,10 @@ app.config(['ENV', function(ENV) {
 	});
 }]);
 
+app.config(['$locationProvider', function($locationProvider) {
+  $locationProvider.hashPrefix('');
+}]);
+
 app.run(['$rootScope', '$state', '$mdToast',function($rootScope, $state, $mdToast) {
 	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
 		if (error=='AUTH_REQUIRED') {

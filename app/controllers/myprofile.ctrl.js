@@ -11,6 +11,7 @@ angular.module('bballapp').controller('MyProfileController', [ '$scope', '$rootS
 		var mywaitlistsRef = userRef.child('mywaitlists');
 		$scope.myballnights = $firebaseArray(mybballnightsRef);
 		$scope.mywaitlists = $firebaseArray(mywaitlistsRef);
+		console.log($rootScope.currentUser.$id)
 
 		$scope.saveProfile = function(){
 			console.log($scope.currentUser.$id);
@@ -41,7 +42,7 @@ angular.module('bballapp').controller('MyProfileController', [ '$scope', '$rootS
 					.hideDelay(2000)
 				);
 			});
-			
+
 		};
 
 		$scope.sendEmailVerification = function(){

@@ -17,9 +17,9 @@
 			</md-input-container>
 		</form>
 
-		<md-list-item class="secondary-button-padding" ng-repeat="(key,ballnight) in ballnights">
+		<md-list-item class="secondary-button-padding" ng-repeat="(key,ballnight) in ballnights | orderBy: bball_date:true">
 			<p>
-				{{ ballnight.bball_date | date: 'M/dd/yyyy' }} 
+				{{ ballnight.bball_date | date: 'M/dd/yyyy' }}
 				{{ ballnight.counter }}/{{ ballnight.waitlistcounter }}
 				{{ ballnight.visible }}
 			</p>

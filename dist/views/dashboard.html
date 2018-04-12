@@ -15,41 +15,40 @@
 			<div flex></div>
 			<!-- <div align="center">My Balance: {{ currentUser.balance | currency }}</div> -->
 			<div flex></div>
-			<div>	
-				<i class="mdi mdi-check-circle-outline mdi-18px mdi-dark" style="color:green;"></i> 
+			<div>
+				<i class="mdi mdi-check-circle-outline mdi-18px mdi-dark" style="color:green;"></i>
 				<span class="bb-small">= In</span>
-				<i class="mdi mdi-alert-circle-outline mdi-18px mdi-dark" style="color:red;" ></i> 
+				<i class="mdi mdi-alert-circle-outline mdi-18px mdi-dark" style="color:red;" ></i>
 				<span class="bb-small">= Waitlist</span>
 			</div>
 
 		</div>
 	</md-subheader>
 	<md-content layout-wrap style="height: 40vh">
-		<md-list-item ng-repeat="ballnight in ballnights | filter: { visible: '!false' }" 
-				ng-click="go(ballnight.bball_date)" 
+		<md-list-item ng-repeat="ballnight in ballnights | filter: { visible: '!false' }"
+				ng-click="go(ballnight.bball_date)"
 				ng-style="ballnight.bball_date < today && {'background-color':'#5C5C5C'} || {'background-color': '#F2F2F2'}"z
 				>
 			<div class="md-list-item-text">
-				
+
 				<player-status data="ballnight"></player-status>
-				{{ ballnight.bball_date | date: 'M/dd/yyyy' }}
-				
+				{{ ballnight.bball_date | date: 'M/dd/yyyy - EEEE' }}
 				<span style="font-size: 11px; padding-bottom: 10px;">
-					<roster-count data="ballnight"></roster-count>	
+					<roster-count data="ballnight"></roster-count>
 					<waitlist-count data="ballnight"></waitlist-count>
 					<md-tooltip md-direction="bottom">
 						Click here to see night details
 					</md-tooltip>
-				</span>	
-				
-			</div>	
-			
+				</span>
+
+			</div>
+
 			<span flex></span>
 			<span ng-if="ballnight.counter==16" style="font-weight:bold;color:red;">FULL</span>
 			<span ng-if="ballnight.counter<16">+{{ 16 - ballnight.counter}}</span>
 			<md-menu md-position-mode="target-right target" >
-				
-				<md-button class="md-icon-button" ng-click="$mdOpenMenu($event)" aria-label="actions" ng-disabled="ballnight.bball_date < today">
+
+				<md-button class="md-icon-button" ng-click="$mdOpenMenu($event)" aria-label="actions" ng-disabled="ballnight.bball_date < today || currentUser.disabled">
 					<md-icon class="mdi mdi-dots-vertical mdi-24px"></md-icon>
 				</md-button>
 				<md-menu-content width="4" >
@@ -61,7 +60,7 @@
 					</md-menu-item>
 					<md-menu-item>
 						<!-- <md-button ng-click="checkout(ballnight)" confirm="Are you sure?"> -->
-						
+
 						<md-button ng-click="checkout(ballnight.bball_date, $event)">
 							<md-icon class="mdi mdi-close-circle-outline mdi-24px mdi-dark bb-mdi-fix"></md-icon>
 							Remove me

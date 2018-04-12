@@ -19,6 +19,7 @@ var pump = require('pump');
 var babel  = require('gulp-babel');
 var es2015 = require('babel-preset-es2015');
 var gulpNgConfig = require('gulp-ng-config');
+var RevAll = require('gulp-rev-all');
 
 var paths = {
 	javascripts: [
@@ -70,7 +71,7 @@ gulp.task('browserSync', function(){
 });
 
 gulp.task('watch', ['browserSync'], function(){
-	gulp.watch('app/*.html', browserSync.reload);
+	gulp.watch('app/**/*.html', browserSync.reload);
 	gulp.watch('app/js/**/*.js', browserSync.reload);
 
 });
@@ -187,6 +188,9 @@ gulp.task('scripts', ['templates'], function() {
          	console.log(e);
     	}))
 		.pipe(rename('main.min.js'))
+		.pipe(RevAll.revision())
+		.pipe(gulp.dest('./dist'))
+		.pipe(RevAll.manifestFile())
 		.pipe(gulp.dest('./dist'));
 });
 
@@ -195,7 +199,7 @@ gulp.task('firebase', function(){
 		.pipe(gulp.dest('./dist/lib/firebase/'));
 });
 
-gulp.task('production', ['scripts', 'views', 'fonts', 'images', 'useref']);
+gulp.task('production', ['clean:dist', 'firebase', 'scripts', 'views', 'fonts', 'images', 'useref']);
 
 gulp.task('default', function(callback){
 	runSequence(['browserSync', 'watch'], callback);
